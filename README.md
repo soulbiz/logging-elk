@@ -25,3 +25,13 @@ We'll need to use the following for our setup:
 ### Senders - Client Servers Technologies
 
 * [Filebeat](https://www.elastic.co/products/beats/filebeat)
+
+
+Logstash is an open source tool for collecting, parsing, and storing logs for future use.
+
+Kibana is a web interface that can be used to search and view the logs that Logstash has indexed.
+
+Both of these tools are based on Elasticsearch, which is used for storing logs.
+
+
+[!infrastructure](images/elk-infrastructure.png)
