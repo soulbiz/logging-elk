@@ -82,28 +82,28 @@ Install Kibana with this command:
 
 Open the Kibana configuration file for editing:
 
-    sudo vi /opt/kibana/config/kibana.yml
+    sudo vim /opt/kibana/config/kibana.yml
 
-In the Kibana configuration file, find the line that specifies server.host, and replace the IP address ("0.0.0.0" by default) with "localhost":
-kibana.yml excerpt (updated)
+In the Kibana configuration file, find the line that specifies `server.host`, and replace the IP address ("0.0.0.0" by default) with "localhost":
 
-server.host: "localhost"
+    server.host: "localhost"
 
-Save and exit. This setting makes it so Kibana will only be accessible to the localhost. This is fine because we will install an Nginx reverse proxy, on the same server, to allow external access.
+Save and exit. This setting makes it so Kibana will only be accessible to the localhost. This is fine because we will have an Nginx reverse proxy, on the same server, to allow external access.
 
 Now start the Kibana service, and enable it:
 
     sudo systemctl start kibana
-    sudo chkconfig kibana on
+    sudo systemctl enable kibana
 
 Before we can use the Kibana web interface, we have to set up a reverse proxy. Let's do that now, with Nginx.
-Install Nginx
 
-Because we configured Kibana to listen on localhost, we must set up a reverse proxy to allow external access to it. We will use Nginx for this purpose.
+### Install Nginx
 
-Note: If you already have an Nginx instance that you want to use, feel free to use that instead. Just make sure to configure Kibana so it is reachable by your Nginx server (you probably want to change the host value, in /opt/kibana/config/kibana.yml, to your Kibana server's private IP address). Also, it is recommended that you enable SSL/TLS.
+Because we configured Kibana to listen on `localhost`, we must set up a reverse proxy to allow external access to it. We will use Nginx for this purpose.
 
-Add the EPEL repository to yum:
+Note: If you already have an Nginx instance that you want to use, feel free to use that instead. Just make sure to configure Kibana so it is reachable by your Nginx server (you probably want to change the `host` value, in `/opt/kibana/config/kibana.yml`, to your Kibana server's private IP address). Also, it is recommended that you enable SSL/TLS.
+
+Add the EPEL repository to yum (if needed on CentOS):
 
     sudo yum -y install epel-release
 
@@ -111,35 +111,34 @@ Now use yum to install Nginx and httpd-tools:
 
     sudo yum -y install nginx httpd-tools
 
-Use htpasswd to create an admin user, called "kibanaadmin" (you should use another name), that can access the Kibana web interface:
+Use htpasswd to create an admin user, called "kibanaadmin" (you should use another name!), that can access the Kibana web interface:
 
     sudo htpasswd -c /etc/nginx/htpasswd.users kibanaadmin
 
 Enter a password at the prompt. Remember this login, as you will need it to access the Kibana web interface.
 
-Now open the Nginx configuration file in your favorite editor. We will use vi:
+Now open the Nginx configuration file:
 
-    sudo vi /etc/nginx/nginx.conf
+    sudo vim /etc/nginx/nginx.conf
 
-Find the default server block (starts with server {), the last configuration block in the file, and delete it. When you are done, the last two lines in the file should look like this:
-nginx.conf excerpt
+Find the default server block (starts with `server {`), the last configuration block in the file, and delete it. When you are done, the last two lines in the file should look like this:
 
     include /etc/nginx/conf.d/*.conf;
-}
+    }
 
 Save and exit.
 
 Now we will create an Nginx server block in a new file:
 
-    sudo vi /etc/nginx/conf.d/kibana.conf
+    sudo vim /etc/nginx/conf.d/kibana.conf
 
-Paste the following code block into the file. Be sure to update the server_name to match your server's name:
-/etc/nginx/conf.d/kibana.conf
+Paste the following code block into the file. Be sure to update the `server_name` to match your server's name:
 
-    server {
+<pre><code>
+        server {
         listen 80;
 
-        server_name example.com;
+        server_name <b>example.com</b>;
 
         auth_basic "Restricted Access";
         auth_basic_user_file /etc/nginx/htpasswd.users;
@@ -153,25 +152,28 @@ Paste the following code block into the file. Be sure to update the server_name 
             proxy_cache_bypass $http_upgrade;        
         }
     }
+</code></pre>
 
-Save and exit. This configures Nginx to direct your server's HTTP traffic to the Kibana application, which is listening on localhost:5601. Also, Nginx will use the htpasswd.users file, that we created earlier, and require basic authentication.
+Save and exit. This configures Nginx to direct your server's HTTP traffic to the Kibana application, which is listening on `localhost:5601`. Also, Nginx will use the `htpasswd.users` file, that we created earlier, and require basic authentication.
 
 Now start and enable Nginx to put our changes into effect:
 
     sudo systemctl start nginx
     sudo systemctl enable nginx
 
-Note: This tutorial assumes that SELinux is disabled. If this is not the case, you may need to run the following command for Kibana to work properly: sudo setsebool -P httpd_can_network_connect 1
+**Note**: *This tutorial assumes that SELinux is disabled.*
 
-Kibana is now accessible via your FQDN or the public IP address of your ELK Server i.e. http://elk\_server\_public\_ip/. If you go there in a web browser, after entering the "kibanaadmin" credentials, you should see a Kibana welcome page which will ask you to configure an index pattern. Let's get back to that later, after we install all of the other components.
-Install Logstash
+Kibana is now accessible via your FQDN or the public IP address of your ELK Server i.e. `http://elk\_server\_public\_ip/`. If you go there in a web browser, after entering the "kibanaadmin" credentials, you should see a Kibana welcome page which will ask you to configure an index pattern. Let's get back to that later, after we install all of the other components.
 
-The Logstash package shares the same GPG Key as Elasticsearch, and we already installed that public key, so let's create and edit a new Yum repository file for Logstash:
+## Install Logstash
 
-    sudo vi /etc/yum.repos.d/logstash.repo
+The Logstash package shares the same GPG Key as Elasticsearch, and we already installed that public key.
+
+Create and edit a new yum repository file for Logstash:
+
+    sudo vim /etc/yum.repos.d/logstash.repo
 
 Add the following repository configuration:
-/etc/yum.repos.d/logstash.repo
 
     [logstash-2.2]
     name=logstash repository for 2.2 packages
@@ -187,3 +189,5 @@ Install Logstash with this command:
     sudo yum -y install logstash
 
 Logstash is installed but it is not configured yet.
+
+**Note**: *We will configure it properly before setting it up and running!*
