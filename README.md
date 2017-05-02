@@ -34,4 +34,4 @@ Kibana is a web interface that can be used to search and view the logs that Logs
 Both of these tools are based on Elasticsearch, which is used for storing logs.
 
 
-[!infrastructure](images/elk-infrastructure.png)
+![infrastructure](images/elk-infrastructure.png)
