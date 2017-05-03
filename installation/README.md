@@ -1,6 +1,6 @@
 # Installation
 
-We'll be covering the installation process for a CentOS 7 server.
+We'll be covering the installation process for a Fedora 23 server.
 Anyway, it should provide enough guidance to apply it in any other suitable distribution.
 
 ## Prerequisites
@@ -18,7 +18,7 @@ Elasticsearch can be installed with a package manager by adding Elastic's packag
 
 Run the following command to import the Elasticsearch public GPG key into rpm:
 
-    sudo rpm --import http://packages.elastic.co/GPG-KEY-elasticsearch
+    sudo rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch
 
 Create a new yum repository file for Elasticsearch.
 
@@ -27,12 +27,14 @@ Create a new yum repository file for Elasticsearch.
 Add the following repository configuration:
 /etc/yum.repos.d/elasticsearch.repo
 
-    [elasticsearch-2.x]
-    name=Elasticsearch repository for 2.x packages
-    baseurl=http://packages.elastic.co/elasticsearch/2.x/centos
-    gpgcheck=1
-    gpgkey=http://packages.elastic.co/GPG-KEY-elasticsearch
-    enabled=1
+	[elasticsearch-5.x]
+	name=Elasticsearch repository for 5.x packages
+	baseurl=https://artifacts.elastic.co/packages/5.x/yum
+	gpgcheck=1
+	gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+	enabled=1
+	autorefresh=1
+	type=rpm-md
 
 Save and exit.
 
@@ -67,13 +69,15 @@ Create and edit a new yum repository file for Kibana:
 Add the following repository configuration:
 /etc/yum.repos.d/kibana.repo
 
-    [kibana-4.4]
-    name=Kibana repository for 4.4.x packages
-    baseurl=http://packages.elastic.co/kibana/4.4/centos
-    gpgcheck=1
-    gpgkey=http://packages.elastic.co/GPG-KEY-elasticsearch
-    enabled=1
-
+	[kibana-5.x]
+	name=Kibana repository for 5.x packages
+	baseurl=https://artifacts.elastic.co/packages/5.x/yum
+	gpgcheck=1
+	gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+	enabled=1
+	autorefresh=1
+	type=rpm-md
+	
 Save and exit.
 
 Install Kibana with this command:
@@ -95,75 +99,14 @@ Now start the Kibana service, and enable it:
     sudo systemctl start kibana
     sudo systemctl enable kibana
 
-Before we can use the Kibana web interface, we have to set up a reverse proxy. Let's do that now, with Nginx.
+Before we can use the Kibana web interface, we have to set up a reverse proxy. 
 
-### Install Nginx
+If you want to follow our setup, check how to do it here:
 
-Because we configured Kibana to listen on `localhost`, we must set up a reverse proxy to allow external access to it. We will use Nginx for this purpose.
+[Setting up a reverse proxy with Nginx.](nginx.md)
 
-Note: If you already have an Nginx instance that you want to use, feel free to use that instead. Just make sure to configure Kibana so it is reachable by your Nginx server (you probably want to change the `host` value, in `/opt/kibana/config/kibana.yml`, to your Kibana server's private IP address). Also, it is recommended that you enable SSL/TLS.
+Otherwise, feel free to setup your own proxy so you can access the Kibana interface!
 
-Add the EPEL repository to yum (if needed on CentOS):
-
-    sudo yum -y install epel-release
-
-Now use yum to install Nginx and httpd-tools:
-
-    sudo yum -y install nginx httpd-tools
-
-Use htpasswd to create an admin user, called "kibanaadmin" (you should use another name!), that can access the Kibana web interface:
-
-    sudo htpasswd -c /etc/nginx/htpasswd.users kibanaadmin
-
-Enter a password at the prompt. Remember this login, as you will need it to access the Kibana web interface.
-
-Now open the Nginx configuration file:
-
-    sudo vim /etc/nginx/nginx.conf
-
-Find the default server block (starts with `server {`), the last configuration block in the file, and delete it. When you are done, the last two lines in the file should look like this:
-
-    include /etc/nginx/conf.d/*.conf;
-    }
-
-Save and exit.
-
-Now we will create an Nginx server block in a new file:
-
-    sudo vim /etc/nginx/conf.d/kibana.conf
-
-Paste the following code block into the file. Be sure to update the `server_name` to match your server's name:
-
-<pre><code>
-        server {
-        listen 80;
-
-        server_name <b>example.com</b>;
-
-        auth_basic "Restricted Access";
-        auth_basic_user_file /etc/nginx/htpasswd.users;
-
-        location / {
-            proxy_pass http://localhost:5601;
-            proxy_http_version 1.1;
-            proxy_set_header Upgrade $http_upgrade;
-            proxy_set_header Connection 'upgrade';
-            proxy_set_header Host $host;
-            proxy_cache_bypass $http_upgrade;        
-        }
-    }
-</code></pre>
-
-Save and exit. This configures Nginx to direct your server's HTTP traffic to the Kibana application, which is listening on `localhost:5601`. Also, Nginx will use the `htpasswd.users` file, that we created earlier, and require basic authentication.
-
-Now start and enable Nginx to put our changes into effect:
-
-    sudo systemctl start nginx
-    sudo systemctl enable nginx
-
-**Note**: *This tutorial assumes that SELinux is disabled.*
-
-Kibana is now accessible via your FQDN or the public IP address of your ELK Server i.e. `http://elk\_server\_public\_ip/`. If you go there in a web browser, after entering the "kibanaadmin" credentials, you should see a Kibana welcome page which will ask you to configure an index pattern. Let's get back to that later, after we install all of the other components.
 
 ## Install Logstash
 
@@ -175,12 +118,14 @@ Create and edit a new yum repository file for Logstash:
 
 Add the following repository configuration:
 
-    [logstash-2.2]
-    name=logstash repository for 2.2 packages
-    baseurl=http://packages.elasticsearch.org/logstash/2.2/centos
-    gpgcheck=1
-    gpgkey=http://packages.elasticsearch.org/GPG-KEY-elasticsearch
-    enabled=1
+	[logstash-5.x]
+	name=Elastic repository for 5.x packages
+	baseurl=https://artifacts.elastic.co/packages/5.x/yum
+	gpgcheck=1
+	gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+	enabled=1
+	autorefresh=1
+	type=rpm-md
 
 Save and exit.
 
