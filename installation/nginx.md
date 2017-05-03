@@ -1,4 +1,4 @@
-# Install Nginx
+# Reverse Proxy w/ Nginx
 
 Because we configured Kibana to listen on `localhost`, we must set up a reverse proxy to allow external access to it. We will use Nginx for this purpose.
 

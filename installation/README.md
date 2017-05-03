@@ -7,18 +7,15 @@ Anyway, it should provide enough guidance to apply it in any other suitable dist
 
 For our *ELK Server* (from now on, **ELKS**) we'll also need to install:
 
-* Java 8 (As recommended by Elasticsearch ATM, or the latest version)
+* Java 8 (As recommended by Elasticsearch, Java 9 not supported)
 * Nginx (To setup a reverse proxy for external connections)
 
-We will not cover that here, since we assume it should be easily done!
-
-## Install Elasticsearch
-
-Elasticsearch can be installed with a package manager by adding Elastic's package repository.
-
+Our ELK Stack can be installed with a package manager by adding Elastic's package repository.
 Run the following command to import the Elasticsearch public GPG key into rpm:
 
     sudo rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch
+
+## Install Elasticsearch
 
 Create a new yum repository file for Elasticsearch.
 
@@ -40,7 +37,7 @@ Save and exit.
 
 Now install Elasticsearch:
 
-    sudo yum -y install elasticsearch
+    sudo dnf -y install elasticsearch
 
 Elasticsearch is now installed. Let's edit the configuration:
 
@@ -82,17 +79,11 @@ Save and exit.
 
 Install Kibana with this command:
 
-    sudo yum -y install kibana
+    sudo dnf -y install kibana
 
-Open the Kibana configuration file for editing:
+By default, Kibana only listens to `localhost`.
 
-    sudo vim /opt/kibana/config/kibana.yml
-
-In the Kibana configuration file, find the line that specifies `server.host`, and replace the IP address ("0.0.0.0" by default) with "localhost":
-
-    server.host: "localhost"
-
-Save and exit. This setting makes it so Kibana will only be accessible to the localhost. This is fine because we will have an Nginx reverse proxy, on the same server, to allow external access.
+This is fine because we will have an Nginx reverse proxy, on the same server, to allow external access.
 
 Now start the Kibana service, and enable it:
 
@@ -109,8 +100,6 @@ Otherwise, feel free to setup your own proxy so you can access the Kibana interf
 
 
 ## Install Logstash
-
-The Logstash package shares the same GPG Key as Elasticsearch, and we already installed that public key.
 
 Create and edit a new yum repository file for Logstash:
 
@@ -131,8 +120,14 @@ Save and exit.
 
 Install Logstash with this command:
 
-    sudo yum -y install logstash
+    sudo dnf -y install logstash
 
 Logstash is installed but it is not configured yet.
 
 **Note**: *We will configure it properly before setting it up and running!*
+
+Here we'll start the real deal: configuring our Logstash service to parse the log types that we want to visualize on Kibana.
+
+## References:
+
+[**Digital Ocean - Mitchell Anicas**: How To Install ELK on CentOS 7](https://www.digitalocean.com/community/tutorials/how-to-install-elasticsearch-logstash-and-kibana-elk-stack-on-centos-7)
