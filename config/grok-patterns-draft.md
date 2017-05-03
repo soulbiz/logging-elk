@@ -36,6 +36,7 @@ MATCHED BY:
 
 ## Custom patterns file example
 
+```
 TYPE type=%{WORD}
 MSG_ID msg=audit([0-9]+\.[0-9]+:[0-9]+)
 PID pid=[0-9]+
@@ -44,6 +45,7 @@ UNIT unit=%{WORD}@%{WORD}
 EXE exe="%{UNIXPATH}"
 MSG msg=%{QUOTEDSTRING}
 RES res=%{WORD}
+```
 
 [//]: ##################################################################
 [//]: ##################################################################
