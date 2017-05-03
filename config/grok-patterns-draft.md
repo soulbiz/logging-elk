@@ -137,3 +137,4 @@ filter {
 
 * https://logz.io/blog/logstash-grok/
 * https://grokdebug.herokuapp.com/
+* https://discuss.elastic.co/t/grok-multiple-match-logstash/27870
