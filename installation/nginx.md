@@ -4,7 +4,7 @@ Because we configured Kibana to listen on `localhost`, we must set up a reverse 
 
 Use yum to install Nginx and httpd-tools:
 
-    sudo yum -y install nginx httpd-tools
+    sudo dnf -y install nginx httpd-tools
 
 Use htpasswd to create an admin user, called "kibadmin" (or better: use any other name!), that can access the Kibana web interface:
 
@@ -27,7 +27,7 @@ Now we will create an Nginx server block in a new file:
 
     sudo vim /etc/nginx/conf.d/kibana.conf
 
-Paste the following code block into the file. Be sure to update the `server_name` to match your server's name:
+Paste the following code block into the file. Be sure to update the `server_name` to match your server's name or IP:
 
         server {
         listen 80;

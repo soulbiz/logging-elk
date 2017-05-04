@@ -76,7 +76,7 @@ It should display Configuration OK if there are no syntax errors. Otherwise, try
 
 Restart and enable Logstash to put our configuration changes into effect:
 
-    sudo systemctl restart logstash
-    sudo chkconfig logstash on
+    sudo systemctl start logstash
+    sudo systemctl enable logstash
 
 Next, we'll load the sample Kibana dashboards.
