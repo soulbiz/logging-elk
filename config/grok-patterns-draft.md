@@ -32,6 +32,33 @@ MATCHED BY:
 [//]: ##################################################################
 [//]: ##################################################################
 
+
+## FUNCTIONAL AUDIT PATTERN
+
+```
+filter {
+  if [type] == "audit" {
+    grok {
+
+        match => { "message" => ["type=%{WORD:audit_type} msg=audit\(%{NUMBER:audit_epoch}:%{NUMBER:audit_counter}\): pid=%{NUMBER:audit_pid} uid=%{NUMBER:audit_uid} auid=%{NUMBER:audit_audid} ses=%{NUMBER:ses} subj=%{GREEDYDATA:subj} msg=\'unit=%{GREEDYDATA:unit} comm=\"%{WORD:command}\" exe=\"%{UNIXPATH:exec}\" hostname=%{GREEDYDATA:hostname} addr=%{GREEDYDATA:ipaddr} terminal=%{GREEDYDATA:terminal} res=%{WORD:result}\'",
+								 "type=%{WORD:audit_type} msg=audit\(%{NUMBER:audit_epoch}:%{NUMBER:audit_counter}\): pid=%{NUMBER:audit_pid} uid=%{NUMBER:audit_uid} auid=%{NUMBER:audit_audid} ses=%{NUMBER:ses} subj=%{GREEDYDATA:subj} msg=\'op=%{WORD:operation}:%{WORD:detail_operation} grantors=%{WORD:grantors} acct=\"%{WORD:acct_user}\" exe=\"%{UNIXPATH:exec}\" hostname=%{GREEDYDATA:hostname} addr=%{GREEDYDATA:ipaddr} terminal=%{GREEDYDATA:terminal} res=%{WORD:result}\'"] }
+
+      add_field => [ "received_at", "%{@timestamp}" ]
+      add_field => [ "received_from", "%{host}" ]
+    }
+
+    date {
+      match => [ "syslog_timestamp", "MMM  d HH:mm:ss", "MMM dd HH:mm:ss" ]
+    }
+  }
+}
+
+```
+
+
+[//]: ##################################################################
+[//]: ##################################################################
+
 ---
 
 ## Custom patterns file example
@@ -92,37 +119,6 @@ filter {
 
         date {
           match => [ "audit_epoch", "UNIX_MS" ]
-        }
-  }
-}
-```
-
-[//]: ##################################################################
-[//]: ##################################################################
-
----
-
-```
-filter {
-  if [type] == "syslog" {
-        grok {
-          patterns_dir => ["./patterns"]
-          # example:
-                  # type=CRED_DISP msg=audit(1431084081.914:298): pid=1807 uid=0 auid=1000
-                  # ses=7 msg='op=PAM:setcred acct="user1" exe="/usr/sbin/sshd" hostname=host1
-                  # addr=192.168.160.1 terminal=ssh res=success'
-
-          match => { "message" => "%{AUDIT}" }
-          tag_on_failure => [ "_grokparsefailure_auditlog" ]
-          overwrite => [ "message" ]
-
-        }
-
-        if [audit_epoch] {
-          date {
-            match => [ "audit_epoch", "UNIX" ]
-            remove_field => [ "audit_epoch" ]
-          }
         }
   }
 }
