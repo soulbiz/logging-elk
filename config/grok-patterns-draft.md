@@ -1,6 +1,8 @@
-# Examples Draft
+# Parsing Config Draft
 
-## Grok Parsing Examples:
+## Grok Parsing:
+
+### Audit-Service Log Line
 
 | LOG LINE - AUDIT SERVICE | FILTER MATCH  |
 |:------------------------:|:-------------:|
@@ -14,6 +16,7 @@ MATCHED BY:
 
 	type=%{WORD:audit_type} msg=audit\(%{NUMBER:audit_epoch}:%{NUMBER:audit_counter}\): pid=%{NUMBER:audit_pid} uid=%{NUMBER:audit_uid} auid=%{NUMBER:audit_audid} ses=%{NUMBER:ses} subj=%{GREEDYDATA:subj} msg=\'unit=%{GREEDYDATA:unit} comm=\"%{WORD:command}\" exe=\"%{UNIXPATH:exec}\" hostname=%{GREEDYDATA:hostname} addr=%{GREEDYDATA:ipaddr} terminal=%{GREEDYDATA:terminal} res=%{WORD:result}\'
 
+### Audit-Auth Log Line
 
 | LOG LINE - AUDIT AUTH | FILTER MATCH  |
 |:---------------------:|:-------------:|
@@ -28,32 +31,24 @@ MATCHED BY:
 
 	type=%{WORD:audit_type} msg=audit\(%{NUMBER:audit_epoch}:%{NUMBER:audit_counter}\): pid=%{NUMBER:audit_pid} uid=%{NUMBER:audit_uid} auid=%{NUMBER:audit_audid} ses=%{NUMBER:ses} subj=%{GREEDYDATA:subj} msg=\'op=%{WORD:operation}:%{WORD:detail_operation} grantors=%{WORD:grantors} acct=\"%{WORD:acct_user}\" exe=\"%{UNIXPATH:exec}\" hostname=%{GREEDYDATA:hostname} addr=%{GREEDYDATA:ipaddr} terminal=%{GREEDYDATA:terminal} res=%{WORD:result}\'
 
+### Samba Log Line
 
-[//]: ##################################################################
-[//]: ##################################################################
+Custom pattern for this grok filter (samba timestamp format):
+
+	SMBDATE %{YEAR}\/%{MONTHNUM}\/%{MONTHDAY}%{SPACE}%{TIME}
+
+| LOG LINE - SAMBA | FILTER MATCH  |
+|:---------------------:|:-------------:|
+| \[2017/05/07 03:49:40,  0\] lib/util_sock.c:1491(get_peer_addr_internal)\n  getpeername failed. Error was Transport endpoint is not connected\n  Denied connection from 0.0.0.0 (0.0.0.0) | ^\[%{SMBDATE:samba_date},%{SPACE}%{NUMBER:samba_severity_code}\]%{SPACE}%{DATA:samba_class}\n%{SPACE}%{GREEDYDATA:samba_message}", "\[%{SMBDATE:samba_date},%{SPACE}%{NUMBER:samba_severity_code}\]%{SPACE}%{GREEDYDATA:samba_class} |
 
 
-## FUNCTIONAL AUDIT PATTERN
+EXAMPLE:
 
-```
-filter {
-  if [type] == "audit" {
-    grok {
+	\[2017/05/07 03:49:40,  0\] lib/util_sock.c:1491(get_peer_addr_internal)\n  getpeername failed. Error was Transport endpoint is not connected\n  Denied connection from 0.0.0.0 (0.0.0.0)
 
-        match => { "message" => ["type=%{WORD:audit_type} msg=audit\(%{NUMBER:audit_epoch}:%{NUMBER:audit_counter}\): pid=%{NUMBER:audit_pid} uid=%{NUMBER:audit_uid} auid=%{NUMBER:audit_audid} ses=%{NUMBER:ses} subj=%{GREEDYDATA:subj} msg=\'unit=%{GREEDYDATA:unit} comm=\"%{WORD:command}\" exe=\"%{UNIXPATH:exec}\" hostname=%{GREEDYDATA:hostname} addr=%{GREEDYDATA:ipaddr} terminal=%{GREEDYDATA:terminal} res=%{WORD:result}\'",
-								 "type=%{WORD:audit_type} msg=audit\(%{NUMBER:audit_epoch}:%{NUMBER:audit_counter}\): pid=%{NUMBER:audit_pid} uid=%{NUMBER:audit_uid} auid=%{NUMBER:audit_audid} ses=%{NUMBER:ses} subj=%{GREEDYDATA:subj} msg=\'op=%{WORD:operation}:%{WORD:detail_operation} grantors=%{WORD:grantors} acct=\"%{WORD:acct_user}\" exe=\"%{UNIXPATH:exec}\" hostname=%{GREEDYDATA:hostname} addr=%{GREEDYDATA:ipaddr} terminal=%{GREEDYDATA:terminal} res=%{WORD:result}\'"] }
+MATCHED BY:
 
-      add_field => [ "received_at", "%{@timestamp}" ]
-      add_field => [ "received_from", "%{host}" ]
-    }
-
-    date {
-      match => [ "syslog_timestamp", "MMM  d HH:mm:ss", "MMM dd HH:mm:ss" ]
-    }
-  }
-}
-
-```
+	^\[%{SMBDATE:samba_date},%{SPACE}%{NUMBER:samba_severity_code}\]%{SPACE}%{DATA:samba_class}\n%{SPACE}%{GREEDYDATA:samba_message}", "\[%{SMBDATE:samba_date},%{SPACE}%{NUMBER:samba_severity_code}\]%{SPACE}%{GREEDYDATA:samba_class}
 
 
 [//]: ##################################################################
@@ -72,6 +67,7 @@ UNIT unit=%{WORD}@%{WORD}
 EXE exe="%{UNIXPATH}"
 MSG msg=%{QUOTEDSTRING}
 RES res=%{WORD}
+SMBDATE %{YEAR}\/%{MONTHNUM}\/%{MONTHDAY}%{SPACE}%{TIME}
 ```
 
 [//]: ##################################################################
@@ -82,47 +78,10 @@ RES res=%{WORD}
 ## Query to Elastic:
 
 	curl -sXGET 'http://localhost:9200/filebeat-*/_search' | jq .
+	curl -sXGET 'localhost:9200/filebeat-2017.05.15/_search?q=_id:AVwLEWovA8gqDUZC_cY5' | jq .
+	curl -XDELETE 'localhost:9200/filebeat-2017.05.15'
 
 Recommended to use "jq" to highlight syntax for a more user-friendly preview.
-
-[//]: ##################################################################
-[//]: ##################################################################
-
----
-
-```
-filter {
-  if [type] == "syslog" {
-        grok {
-         # patterns_dir => ["./patterns"]
-         # example:
-                 # type=CRED_DISP msg=audit(1431084081.914:298): pid=1807 uid=0 auid=1000
-                 # ses=7 msg='op=PAM:setcred acct="user1" exe="/usr/sbin/sshd" hostname=host1 addr=192.168.160.1 terminal=ssh res=success'
-
-        match => { "message" => "type=%{WORD:audit_type} msg=audit\(%{NUMBER:audit_epoch}:%{NUMBER:audit_counter}\): pid=%{NUMBER:audit_pid} uid=%{NUMBER:audit_uid} auid=%{NUMBER:audit_audid} ses=%{NUMBER:ses} subj=%{GREEDYDATA:subj} msg=\'op=%{WORD:operation}:%{WORD:detail_operation} grantors=%{WORD:grantors} acct=\"%{WORD:acct_user}\" exe=\"%{GREEDYDATA:exec}\" hostname=%{GREEDYDATA:hostname} addr=%{GREEDYDATA:ipaddr} terminal=%{GREEDYDATA:terminal} res=%{WORD:result}\'" }
-
-        add_field => { "audit_type" => "%{audit_type}"}
-        add_field => { "audit_epoch" => "%{audit_epoch}"}
-        add_field => { "audit_counter" => "%{audit_counter}"}
-        add_field => { "audit_pid" => "%{audit_pid}"}
-        add_field => { "audit_uid" => "%{audit_uid}"}
-        add_field => { "operation" => "%{operation}"}
-        add_field => { "detail_operation" => "%{detail_operation}"}
-        add_field => { "acct_user" => "%{acct_user}"}
-        add_field => { "exec" => "%{exec}"}
-        add_field => { "hostname" => "%{hostname}"}
-        add_field => { "ipaddr" => "%{ipaddr}"}
-        add_field => { "terminal" => "%{terminal}"}
-        add_field => { "result" => "%{result}"}
-
-}
-
-        date {
-          match => [ "audit_epoch", "UNIX_MS" ]
-        }
-  }
-}
-```
 
 [//]: ##################################################################
 [//]: ##################################################################
