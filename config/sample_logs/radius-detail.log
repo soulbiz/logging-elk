@@ -1,0 +1,88 @@
+Tue Apr 11 11:05:32 2017
+        Acct-Session-Id = "00000028-0000013C"
+        Acct-Status-Type = Start
+        Acct-Authentic = RADIUS
+        User-Name = "oit47325278"
+        NAS-IP-Address = 10.200.199.12
+        NAS-Identifier = "002722fc0683"
+        NAS-Port = 0
+        Called-Station-Id = "0E-27-22-FD-06-83:edt_alumnes"
+        Calling-Station-Id = "84-B5-41-D7-45-BE"
+        NAS-Port-Type = Wireless-802.11
+        Connect-Info = "CONNECT 0Mbps 802.11b"
+        Acct-Unique-Session-Id = "8c01c85615651a70"
+        Timestamp = 1491901532
+
+Tue Apr 11 11:10:42 2017
+        Acct-Session-Id = "00000028-0000013C"
+        Acct-Status-Type = Stop
+        Acct-Authentic = RADIUS
+        User-Name = "oit47325278"
+        NAS-IP-Address = 10.200.199.12
+        NAS-Identifier = "002722fc0683"
+        NAS-Port = 0
+        Called-Station-Id = "0E-27-22-FD-06-83:edt_alumnes"
+        Calling-Station-Id = "84-B5-41-D7-45-BE"
+        NAS-Port-Type = Wireless-802.11
+        Connect-Info = "CONNECT 0Mbps 802.11b"
+        Acct-Session-Time = 310
+        Acct-Input-Packets = 23
+        Acct-Output-Packets = 22
+        Acct-Input-Octets = 3004
+        Acct-Output-Octets = 8432
+        Event-Timestamp = "Apr 11 2017 11:10:41 CEST"
+        Acct-Terminate-Cause = User-Request
+        Acct-Unique-Session-Id = "8c01c85615651a70"
+        Timestamp = 1491901842
+
+Fri May  5 07:53:01 2017
+        Acct-Session-Id = "00000029-000001DB"
+        Acct-Status-Type = Start
+        Acct-Authentic = RADIUS
+        User-Name = "gpd54029380"
+        NAS-IP-Address = 10.200.199.12
+        NAS-Identifier = "002722fc0683"
+        NAS-Port = 0
+        Called-Station-Id = "0E-27-22-FD-06-83:edt_alumnes"
+        Calling-Station-Id = "1C-67-58-93-66-5C"
+        NAS-Port-Type = Wireless-802.11
+        Connect-Info = "CONNECT 0Mbps 802.11b"
+        Acct-Unique-Session-Id = "35b290c1f722582b"
+        Timestamp = 1493963581
+
+Fri May  5 07:53:07 2017
+        Acct-Session-Id = "00000029-000001DC"
+        Acct-Status-Type = Start
+        Acct-Authentic = RADIUS
+        User-Name = "gpd47264842"
+        NAS-IP-Address = 10.200.199.12
+        NAS-Identifier = "002722fc0683"
+        NAS-Port = 0
+        Called-Station-Id = "0E-27-22-FD-06-83:edt_alumnes"
+        Calling-Station-Id = "8C-BF-A6-D8-2B-1E"
+        NAS-Port-Type = Wireless-802.11
+        Connect-Info = "CONNECT 0Mbps 802.11b"
+        Acct-Unique-Session-Id = "d6c6d4f6aa678723"
+        Timestamp = 1493963587
+
+Fri May  5 07:53:20 2017
+        Acct-Session-Id = "00000029-000001DB"
+        Acct-Status-Type = Stop
+        Acct-Authentic = RADIUS
+        User-Name = "gpd54029380"
+        NAS-IP-Address = 10.200.199.12
+        NAS-Identifier = "002722fc0683"
+        NAS-Port = 0
+        Called-Station-Id = "0E-27-22-FD-06-83:edt_alumnes"
+        Calling-Station-Id = "1C-67-58-93-66-5C"
+        NAS-Port-Type = Wireless-802.11
+        Connect-Info = "CONNECT 0Mbps 802.11b"
+        Acct-Session-Time = 20
+        Acct-Input-Packets = 134
+        Acct-Output-Packets = 124
+        Acct-Input-Octets = 20784
+        Acct-Output-Octets = 37337
+        Event-Timestamp = "May  5 2017 07:53:20 CEST"
+        Acct-Terminate-Cause = User-Request
+        Acct-Unique-Session-Id = "35b290c1f722582b"
+        Timestamp = 1493963600

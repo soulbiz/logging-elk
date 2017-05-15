@@ -1,0 +1,44 @@
+Tue Apr 11 11:05:32 2017
+        Packet-Type = Access-Request
+        User-Name = "oit47325278"
+        NAS-IP-Address = 10.200.199.12
+        NAS-Identifier = "002722fc0683"
+        NAS-Port = 0
+        Called-Station-Id = "0E-27-22-FD-06-83:edt_alumnes"
+        Calling-Station-Id = "84-B5-41-D7-45-BE"
+        Framed-MTU = 1400
+        NAS-Port-Type = Wireless-802.11
+        Connect-Info = "CONNECT 0Mbps 802.11b"
+        EAP-Message = 0x02ae00060319
+        State = 0x45d7a4354579a0b7d9cbd7c062f98bc1
+        Message-Authenticator = 0x9bf601ea0765548e58e8161ce03426f9
+
+Tue Apr 11 11:05:32 2017
+        Packet-Type = Access-Request
+        User-Name = "oit47325278"
+        NAS-IP-Address = 10.200.199.12
+        NAS-Identifier = "002722fc0683"
+        NAS-Port = 0
+        Called-Station-Id = "0E-27-22-FD-06-83:edt_alumnes"
+        Calling-Station-Id = "84-B5-41-D7-45-BE"
+        Framed-MTU = 1400
+        NAS-Port-Type = Wireless-802.11
+        Connect-Info = "CONNECT 0Mbps 802.11b"
+        EAP-Message = 0x02af00c41980000000ba16030100b5010000b10301fdcafeab9af48fe316900c3a58c368d7df2749d769098515e44de2f6a4ad36bf000048c014c00a00390038c00fc0050035c013c00900330032c00ec004002fc011c007c00cc00200050004c012c00800160013c00dc003000a0015001200090014001100080006000300ff01000040000b000403000102000a00340032000e000d0019000b000c00180009000a00160017000800060007001400150004000500120013000100020003000f00100011
+        State = 0x45d7a4354478bdb7d9cbd7c062f98bc1
+        Message-Authenticator = 0xa67ec16eecee6aa35ed7c82780499c1b
+
+Tue Apr 11 11:05:32 2017
+        Packet-Type = Access-Request
+        User-Name = "oit47325278"
+        NAS-IP-Address = 10.200.199.12
+        NAS-Identifier = "002722fc0683"
+        NAS-Port = 0
+        Called-Station-Id = "0E-27-22-FD-06-83:edt_alumnes"
+        Calling-Station-Id = "84-B5-41-D7-45-BE"
+        Framed-MTU = 1400
+        NAS-Port-Type = Wireless-802.11
+        Connect-Info = "CONNECT 0Mbps 802.11b"
+        EAP-Message = 0x02b6002b1900170301002008e5b5fa948c5ef615b6311a2f06942f252a88b99bbd47b2e92f621ca3878bec
+        State = 0x45d7a4354d61bdb7d9cbd7c062f98bc1
+        Message-Authenticator = 0xa1703b7324db4fea8dbe896cd1681baa

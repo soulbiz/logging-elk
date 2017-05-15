@@ -33,7 +33,7 @@ MATCHED BY:
 
 ### Samba Log Line
 
-Custom pattern for this grok filter (samba timestamp format):
+Custom pattern for this grok filter (Samba timestamp format):
 
 	SMBDATE %{YEAR}\/%{MONTHNUM}\/%{MONTHDAY}%{SPACE}%{TIME}
 
@@ -49,6 +49,33 @@ EXAMPLE:
 MATCHED BY:
 
 	^\[%{SMBDATE:samba_date},%{SPACE}%{NUMBER:samba_severity_code}\]%{SPACE}%{DATA:samba_class}\n%{SPACE}%{GREEDYDATA:samba_message}", "\[%{SMBDATE:samba_date},%{SPACE}%{NUMBER:samba_severity_code}\]%{SPACE}%{GREEDYDATA:samba_class}
+
+### Radius Detail Log Line
+
+Custom pattern for this grok filter (Radius timestamp format):
+
+	RADIUSTIMESTAMP %{DAY} %{MONTH} %{MONTHDAY} %{TIME} %{YEAR}
+
+EXAMPLE:
+
+	Tue Apr 11 11:05:32 2017
+			Acct-Session-Id = "00000028-0000013C"
+			Acct-Status-Type = Start
+			Acct-Authentic = RADIUS
+			User-Name = "oit47325278"
+			NAS-IP-Address = 10.200.199.12
+			NAS-Identifier = "002722fc0683"
+			NAS-Port = 0
+			Called-Station-Id = "0E-27-22-FD-06-83:edt_alumnes"
+			Calling-Station-Id = "84-B5-41-D7-45-BE"
+			NAS-Port-Type = Wireless-802.11
+			Connect-Info = "CONNECT 0Mbps 802.11b"
+			Acct-Unique-Session-Id = "8c01c85615651a70"
+			Timestamp = 1491901532
+
+MATCHED BY:
+
+	%{RADIUSTIMESTAMP}%{SPACE}Acct-Session-Id = %{QUOTEDSTRING:Acct-Session-Id}%{SPACE}Acct-Status-Type = %{WORD:AcctStatusType}%{SPACE}Acct-Authentic = %{WORD:AcctAuthentic}%{SPACE}User-Name = \"%{DATA:UserName}\"%{SPACE}NAS-IP-Address = %{IP:NASIPAddress}%{SPACE}NAS-Identifier = \"%{DATA:NASIdentifier}\"%{SPACE}NAS-Port = %{NUMBER:NASPort}%{SPACE}Called-Station-Id = \"%{DATA:CalledStationId}\"%{SPACE}Calling-Station-Id = \"%{MAC:CallingStationId}\"%{SPACE}NAS-Port-Type = %{DATA:NASPortType}%{SPACE}Connect-Info = \"%{DATA:ConnectInfo}\"%{SPACE}Acct-Unique-Session-Id = \"%{DATA:AcctUniqueSessionId}\"%{SPACE}Timestamp = %{NUMBER:Timestamp}
 
 
 [//]: ##################################################################

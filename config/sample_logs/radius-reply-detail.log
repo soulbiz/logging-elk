@@ -1,0 +1,29 @@
+Tue Apr 11 11:05:32 2017
+        Packet-Type = Access-Accept
+        MS-MPPE-Recv-Key = 0xd3f375cb8ecc0c8cb99e4a6fa21e9f31fe4361099c13009ec87f01751009c8ba
+        MS-MPPE-Send-Key = 0xbbbfd5e8e443cd1e98d50436d0bbb1debf22cc1932dc25ad22c63e5902dab73e
+        EAP-MSK = 0xd3f375cb8ecc0c8cb99e4a6fa21e9f31fe4361099c13009ec87f01751009c8babbbfd5e8e443cd1e98d50436d0bbb1debf22cc1932dc25ad22c63e5902dab73e
+        EAP-EMSK = 0x4059af89b68ed4f74762a5571fbff0aa9176b9f8c40429d54d8e6eb828d0391a5967e7b215839df9dfd846245601cda513ca2afcf96873c628fa95d623f6ba06
+        EAP-Message = 0x03b70004
+        Message-Authenticator = 0x00000000000000000000000000000000
+        User-Name = "oit47325278"
+
+Fri May  5 07:53:07 2017
+        Packet-Type = Access-Accept
+        MS-MPPE-Recv-Key = 0xbe4339bca5a91ee2bea3f354b569cda13bbe3f40c6154e2c4d4733cf1e8d0dab
+        MS-MPPE-Send-Key = 0x3860b10d42c04097a173d484368b549642ad56b89089ef3e584dfb71ebb94b42
+        EAP-MSK = 0xbe4339bca5a91ee2bea3f354b569cda13bbe3f40c6154e2c4d4733cf1e8d0dab3860b10d42c04097a173d484368b549642ad56b89089ef3e584dfb71ebb94b42
+        EAP-EMSK = 0x801a24efc61b7e292ecdd3a8205a266fcfb9afd50a4692d89f59ea42fff73573fb5999c291dd933ff3856f5f068aeee0264c4123a4ab9db2faa51ebdbe4f2418
+        EAP-Message = 0x034a0004
+        Message-Authenticator = 0x00000000000000000000000000000000
+        User-Name = "gpd47264842"
+
+Fri May  5 07:53:08 2017
+        Packet-Type = Access-Accept
+        MS-MPPE-Recv-Key = 0x28d23ac98c6e67fc32874a1a33111b497c307180b22be3c111d95c41910bb7ba
+        MS-MPPE-Send-Key = 0x2439e49dc07f23d8b6fe1634ca20601ee42a17d4cb3e7b9cbc7d3c68c1874e3a
+        EAP-MSK = 0x28d23ac98c6e67fc32874a1a33111b497c307180b22be3c111d95c41910bb7ba2439e49dc07f23d8b6fe1634ca20601ee42a17d4cb3e7b9cbc7d3c68c1874e3a
+        EAP-EMSK = 0xe0fb1b3b69222629d053c6f161433f0569d69b334359b424d487f515e7b2a45a6dcb7facf2a02f674c9faed86def80e0d8e6d4da72dceb09187612f84c84ebe8
+        EAP-Message = 0x03a80004
+        Message-Authenticator = 0x00000000000000000000000000000000
+        User-Name = "gpd24548545"
