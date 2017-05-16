@@ -153,4 +153,4 @@ Recommended to use "jq" to highlight syntax for a more user-friendly preview.
 
 * https://logz.io/blog/logstash-grok/
 * https://grokdebug.herokuapp.com/
-* https://discuss.elastic.co/t/grok-multiple-match-logstash/27870
+* https://www.elastic.co/guide/en/beats/filebeat/current/multiline-examples.html
