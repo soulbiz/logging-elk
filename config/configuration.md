@@ -2,57 +2,78 @@
 
 ## Creating our own CA and SSL Certificates
 
+We'll be using the following infrastructure:
+
+* Server certificate
+* Client certificates
+* A main CA to validate both server and client certificates.
+
+Using that we'll be able to ensure a secure communication on both ends.
+We have to make sure that our certificates are signed properly by our CA. Otherwise, we'll be unable to stablish a connection!
+That way we can make sure that no information is sent to unwanted servers or from unwanted clients.
+
+Creating a correct SSL/TLS infrastructure is outside the scope of this document. There are many online resources available for this purpose.
+
 ## Configure Logstash
 
-Logstash configuration files are in the JSON-format, and reside in /etc/logstash/conf.d. The configuration consists of three sections: inputs, filters, and outputs.
+Logstash configuration files are in the JSON-format, and reside in /etc/logstash/conf.d.
+The configuration consists of three sections:
+
+* [Inputs](#logstash-inputs)
+* [Filters](#logstash-filters)
+* [Outputs](#logstash-outputs)
+
+### Logstash Inputs
 
 Let's create a configuration file called 02-beats-input.conf and set up our "filebeat" input:
 
     sudo vim /etc/logstash/conf.d/02-beats-input.conf
 
 Insert the following input configuration:
-02-beats-input.conf
+
+	02-beats-input.conf
 
     input {
       beats {
         port => 5044
         ssl => true
-        ssl_certificate => "/etc/pki/tls/certs/logstash-forwarder.crt"
-        ssl_key => "/etc/pki/tls/private/logstash-forwarder.key"
+        ssl_certificate_authorities => ["/etc/pki/tls/certs/my-ca.crt"]
+        ssl_certificate => "/etc/pki/tls/certs/elk-server.crt"
+        ssl_key => "/etc/pki/tls/private/elk-server.key"
+        ssl_verify_mode => "force_peer"
       }
     }
 
-Save and quit. This specifies a beats input that will listen on tcp port 5044, and it will use the SSL certificate and private key that we created earlier.
+Save and quit. This specifies a beats input that will listen on tcp port 5044, and it will use the SSL certificate and private key that we created for our server.
+Be sure to change the certificates and key paths with your own!
 
-Now let's create a configuration file called 10-syslog-filter.conf, where we will add a filter for syslog messages:
+### Logstash Filters
 
-    sudo vim /etc/logstash/conf.d/10-syslog-filter.conf
+For our setup, we'll be filtering this log sources:
 
-Insert the following syslog filter configuration:
-10-syslog-filter.conf
+* Audit
+* Samba
+* Radius
 
-    filter {
-      if [type] == "syslog" {
-        grok {
-          match => { "message" => "%{SYSLOGTIMESTAMP:syslog_timestamp} %{SYSLOGHOST:syslog_hostname} %{DATA:syslog_program}(?:\[%{POSINT:syslog_pid}\])?: %{GREEDYDATA:syslog_message}" }
-          add_field => [ "received_at", "%{@timestamp}" ]
-          add_field => [ "received_from", "%{host}" ]
-        }
-        syslog_pri { }
-        date {
-          match => [ "syslog_timestamp", "MMM  d HH:mm:ss", "MMM dd HH:mm:ss" ]
-        }
-      }
-    }
+You can access our config files for this purpose here:
 
-Save and quit. This filter looks for logs that are labeled as "syslog" type (by Filebeat), and it will try to use grok to parse incoming syslog logs to make it structured and query-able.
+[Logstash Config Filters](files/)
+
+Those filters look for logs that are labeled as specified on the "document_type" option on Filebeat config. They will try to use Grok to parse incoming logs to make it structured and query-able.
+
+You can check a more specific explanation of our configuration here:
+
+[Logstash Config Filters](grok-patterns-draft.md)
+
+### Logstash Output
 
 Lastly, we will create a configuration file called 30-elasticsearch-output.conf:
 
     sudo vim /etc/logstash/conf.d/30-elasticsearch-output.conf
 
 Insert the following output configuration:
-/etc/logstash/conf.d/30-elasticsearch-output.conf
+
+	/etc/logstash/conf.d/30-elasticsearch-output.conf
 
     output {
       elasticsearch {
