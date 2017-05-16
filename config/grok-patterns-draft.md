@@ -2,7 +2,9 @@
 
 ## Grok Parsing:
 
-### Audit-Service Log Line
+### Audit Patterns
+
+#### Audit-Service Log Line
 
 | LOG LINE - AUDIT SERVICE | FILTER MATCH  |
 |:------------------------:|:-------------:|
@@ -16,7 +18,7 @@ MATCHED BY:
 
 	type=%{WORD:audit_type} msg=audit\(%{NUMBER:audit_epoch}:%{NUMBER:audit_counter}\): pid=%{NUMBER:audit_pid} uid=%{NUMBER:audit_uid} auid=%{NUMBER:audit_audid} ses=%{NUMBER:ses} subj=%{GREEDYDATA:subj} msg=\'unit=%{GREEDYDATA:unit} comm=\"%{WORD:command}\" exe=\"%{UNIXPATH:exec}\" hostname=%{GREEDYDATA:hostname} addr=%{GREEDYDATA:ipaddr} terminal=%{GREEDYDATA:terminal} res=%{WORD:result}\'
 
-### Audit-Auth Log Line
+#### Audit-Auth Log Line
 
 | LOG LINE - AUDIT AUTH | FILTER MATCH  |
 |:---------------------:|:-------------:|
@@ -31,7 +33,7 @@ MATCHED BY:
 
 	type=%{WORD:audit_type} msg=audit\(%{NUMBER:audit_epoch}:%{NUMBER:audit_counter}\): pid=%{NUMBER:audit_pid} uid=%{NUMBER:audit_uid} auid=%{NUMBER:audit_audid} ses=%{NUMBER:ses} subj=%{GREEDYDATA:subj} msg=\'op=%{WORD:operation}:%{WORD:detail_operation} grantors=%{WORD:grantors} acct=\"%{WORD:acct_user}\" exe=\"%{UNIXPATH:exec}\" hostname=%{GREEDYDATA:hostname} addr=%{GREEDYDATA:ipaddr} terminal=%{GREEDYDATA:terminal} res=%{WORD:result}\'
 
-### Samba Log Line
+### Samba Patterns
 
 Custom pattern for this grok filter (Samba timestamp format):
 
@@ -50,11 +52,13 @@ MATCHED BY:
 
 	^\[%{SMBDATE:samba_date},%{SPACE}%{NUMBER:samba_severity_code}\]%{SPACE}%{DATA:samba_class}\n%{SPACE}%{GREEDYDATA:samba_message}", "\[%{SMBDATE:samba_date},%{SPACE}%{NUMBER:samba_severity_code}\]%{SPACE}%{GREEDYDATA:samba_class}
 
-### Radius Detail Log Line
+### Radius Patterns
 
 Custom pattern for this grok filter (Radius timestamp format):
 
 	RADIUSTIMESTAMP %{DAY} %{MONTH} %{MONTHDAY} %{TIME} %{YEAR}
+
+#### Radius Detail-Start Log Line
 
 EXAMPLE:
 
@@ -77,6 +81,36 @@ MATCHED BY:
 
 	%{RADIUSTIMESTAMP}%{SPACE}Acct-Session-Id = %{QUOTEDSTRING:Acct-Session-Id}%{SPACE}Acct-Status-Type = %{WORD:AcctStatusType}%{SPACE}Acct-Authentic = %{WORD:AcctAuthentic}%{SPACE}User-Name = \"%{DATA:UserName}\"%{SPACE}NAS-IP-Address = %{IP:NASIPAddress}%{SPACE}NAS-Identifier = \"%{DATA:NASIdentifier}\"%{SPACE}NAS-Port = %{NUMBER:NASPort}%{SPACE}Called-Station-Id = \"%{DATA:CalledStationId}\"%{SPACE}Calling-Station-Id = \"%{MAC:CallingStationId}\"%{SPACE}NAS-Port-Type = %{DATA:NASPortType}%{SPACE}Connect-Info = \"%{DATA:ConnectInfo}\"%{SPACE}Acct-Unique-Session-Id = \"%{DATA:AcctUniqueSessionId}\"%{SPACE}Timestamp = %{NUMBER:Timestamp}
 
+#### Radius Detail-Stop Log Line
+
+EXAMPLE:
+
+	Tue Apr 11 11:10:42 2017
+			Acct-Session-Id = "00000028-0000013C"
+			Acct-Status-Type = Stop
+			Acct-Authentic = RADIUS
+			User-Name = "oit47325278"
+			NAS-IP-Address = 10.200.199.12
+			NAS-Identifier = "002722fc0683"
+			NAS-Port = 0
+			Called-Station-Id = "0E-27-22-FD-06-83:edt_alumnes"
+			Calling-Station-Id = "84-B5-41-D7-45-BE"
+			NAS-Port-Type = Wireless-802.11
+			Connect-Info = "CONNECT 0Mbps 802.11b"
+			Acct-Session-Time = 310
+			Acct-Input-Packets = 23
+			Acct-Output-Packets = 22
+			Acct-Input-Octets = 3004
+			Acct-Output-Octets = 8432
+			Event-Timestamp = "Apr 11 2017 11:10:41 CEST"
+			Acct-Terminate-Cause = User-Request
+			Acct-Unique-Session-Id = "8c01c85615651a70"
+			Timestamp = 1491901842
+
+MATCHED BY:
+
+
+	%{RADIUSTIMESTAMP}%{SPACE}Acct-Session-Id = %{QUOTEDSTRING:Acct-Session-Id}%{SPACE}Acct-Status-Type = %{WORD:AcctStatusType}%{SPACE}Acct-Authentic = %{WORD:AcctAuthentic}%{SPACE}User-Name = \"%{DATA:UserName}\"%{SPACE}NAS-IP-Address = %{IP:NASIPAddress}%{SPACE}NAS-Identifier = \"%{DATA:NASIdentifier}\"%{SPACE}NAS-Port = %{NUMBER:NASPort}%{SPACE}Called-Station-Id = \"%{DATA:CalledStationId}\"%{SPACE}Calling-Station-Id = \"%{MAC:CallingStationId}\"%{SPACE}NAS-Port-Type = %{DATA:NASPortType}%{SPACE}Connect-Info = \"%{DATA:ConnectInfo}\"%{SPACE}Acct-Session-Time = %{NUMBER:AcctSessionTime}%{SPACE}Acct-Input-Packets = %{NUMBER:AcctInputPackets}%{SPACE}Acct-Output-Packets = %{NUMBER:AcctOutputPackets}%{SPACE}Acct-Input-Octets = %{NUMBER:AcctInputOctets}%{SPACE}Acct-Output-Octets = %{NUMBER:AcctOutputOctets}%{SPACE}Event-Timestamp = \"%{DATA:EventTimestamp}\"%{SPACE}Acct-Terminate-Cause = %{DATA:AcctTerminateCause}%{SPACE}Acct-Unique-Session-Id = \"%{DATA:AcctUniqueSessionId}\"%{SPACE}Timestamp = %{NUMBER:Timestamp}
 
 [//]: ##################################################################
 [//]: ##################################################################
