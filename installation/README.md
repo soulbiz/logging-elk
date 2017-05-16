@@ -43,7 +43,8 @@ Elasticsearch is now installed. Let's edit the configuration:
 
     sudo vim /etc/elasticsearch/elasticsearch.yml
 
-You will want to restrict outside access to your Elasticsearch instance (port 9200), so outsiders can't read your data or shutdown your Elasticsearch cluster through the HTTP API. Find the line that specifies `network.host`, uncomment it, and replace its value with "localhost" so it looks like this:
+You will want to restrict outside access to your Elasticsearch instance (port 9200), so outsiders can't read your data or shutdown your Elasticsearch cluster through the HTTP API. Find the line that specifies `network.host`, uncomment it, and replace its value with `localhost` so it looks like this:
+
 elasticsearch.yml excerpt (updated)
 
     network.host: localhost
@@ -126,7 +127,11 @@ Logstash is installed but it is not configured yet.
 
 **Note**: *We will configure it properly before setting it up and running!*
 
-Here we'll start the real deal: configuring our Logstash service to parse the log types that we want to visualize on Kibana.
+From here we'll start tuning our Logstash service to parse the log types that we want to visualize on Kibana.
+
+Let's keep going!
+
+[ELK Configuration](../config/)
 
 ## References:
 
