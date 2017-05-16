@@ -63,7 +63,7 @@ Those filters look for logs that are labeled as specified on the "document_type"
 
 You can check a more specific explanation of our configuration here:
 
-[Logstash Config Filters](grok-patterns-draft.md)
+[Grok Filters & Patterns](grok-patterns-draft.md)
 
 ### Logstash Output
 
