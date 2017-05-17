@@ -8,7 +8,7 @@
 
 | LOG LINE - AUDIT SERVICE | FILTER MATCH  |
 |:------------------------:|:-------------:|
-| type=SERVICE_STOP msg=audit(1493202842.882:2336): pid=1 uid=0 auid=4294967295 ses=4294967295 subj=system_u:system_r:init_t:s0 msg='unit=user@26 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success' | type=%{WORD:audit_type} msg=audit\(%{NUMBER:audit_epoch}:%{NUMBER:audit_counter}\): pid=%{NUMBER:audit_pid} uid=%{NUMBER:audit_uid} auid=%{NUMBER:audit_audid} ses=%{NUMBER:ses} subj=%{GREEDYDATA:subj} msg=\'unit=%{GREEDYDATA:unit} comm=\"%{WORD:command}\" exe=\"%{UNIXPATH:exec}\" hostname=%{GREEDYDATA:hostname} addr=%{GREEDYDATA:ipaddr} terminal=%{GREEDYDATA:terminal} res=%{WORD:result}\' |
+| type=SERVICE_STOP msg=audit(1493202842.882:2336): pid=1 uid=0 auid=4294967295 ses=4294967295 subj=system_u:system_r:init_t:s0 msg='unit=user@26 comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success' | ^type=%{WORD:audit_type} msg=audit\(%{NUMBER:audit_epoch}:%{NUMBER:audit_counter}\): pid=%{NUMBER:audit_pid} uid=%{NUMBER:audit_uid} auid=%{NUMBER:audit_audid} ses=%{NUMBER:ses} subj=%{GREEDYDATA:subj} msg=\'unit=%{GREEDYDATA:unit} comm=\"%{WORD:command}\" exe=\"%{UNIXPATH:exec}\" hostname=%{GREEDYDATA:hostname} addr=%{GREEDYDATA:ipaddr} terminal=%{GREEDYDATA:terminal} res=%{WORD:result}\' |
 
 EXAMPLE:
 
@@ -16,13 +16,13 @@ EXAMPLE:
 
 MATCHED BY:
 
-	type=%{WORD:audit_type} msg=audit\(%{NUMBER:audit_epoch}:%{NUMBER:audit_counter}\): pid=%{NUMBER:audit_pid} uid=%{NUMBER:audit_uid} auid=%{NUMBER:audit_audid} ses=%{NUMBER:ses} subj=%{GREEDYDATA:subj} msg=\'unit=%{GREEDYDATA:unit} comm=\"%{WORD:command}\" exe=\"%{UNIXPATH:exec}\" hostname=%{GREEDYDATA:hostname} addr=%{GREEDYDATA:ipaddr} terminal=%{GREEDYDATA:terminal} res=%{WORD:result}\'
+	^type=%{WORD:audit_type} msg=audit\(%{NUMBER:audit_epoch}:%{NUMBER:audit_counter}\): pid=%{NUMBER:audit_pid} uid=%{NUMBER:audit_uid} auid=%{NUMBER:audit_audid} ses=%{NUMBER:ses} subj=%{GREEDYDATA:subj} msg=\'unit=%{GREEDYDATA:unit} comm=\"%{WORD:command}\" exe=\"%{UNIXPATH:exec}\" hostname=%{GREEDYDATA:hostname} addr=%{GREEDYDATA:ipaddr} terminal=%{GREEDYDATA:terminal} res=%{WORD:result}\'
 
 #### Audit-Auth Log Line
 
 | LOG LINE - AUDIT AUTH | FILTER MATCH  |
 |:---------------------:|:-------------:|
-| type=USER_AUTH msg=audit(1493202855.160:2337): pid=16686 uid=100495 auid=100495 ses=3 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 msg='op=PAM:authentication grantors=pam_unix acct="root" exe="/usr/bin/su" hostname=? addr=? terminal=pts/2 res=success' | type=%{WORD:audit_type} msg=audit\(%{NUMBER:audit_epoch}:%{NUMBER:audit_counter}\): pid=%{NUMBER:audit_pid} uid=%{NUMBER:audit_uid} auid=%{NUMBER:audit_audid} ses=%{NUMBER:ses} subj=%{GREEDYDATA:subj} msg=\'op=%{WORD:operation}:%{WORD:detail_operation} grantors=%{WORD:grantors} acct=\"%{WORD:acct_user}\" exe=\"%{UNIXPATH:exec}\" hostname=%{GREEDYDATA:hostname} addr=%{GREEDYDATA:ipaddr} terminal=%{GREEDYDATA:terminal} res=%{WORD:result}\' |
+| type=USER_AUTH msg=audit(1493202855.160:2337): pid=16686 uid=100495 auid=100495 ses=3 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 msg='op=PAM:authentication grantors=pam_unix acct="root" exe="/usr/bin/su" hostname=? addr=? terminal=pts/2 res=success' | ^type=%{WORD:audit_type} msg=audit\(%{NUMBER:audit_epoch}:%{NUMBER:audit_counter}\): pid=%{NUMBER:audit_pid} uid=%{NUMBER:audit_uid} auid=%{NUMBER:audit_audid} ses=%{NUMBER:ses} subj=%{GREEDYDATA:subj} msg=\'op=%{WORD:operation}:%{WORD:detail_operation} grantors=%{WORD:grantors} acct=\"%{WORD:acct_user}\" exe=\"%{UNIXPATH:exec}\" hostname=%{GREEDYDATA:hostname} addr=%{GREEDYDATA:ipaddr} terminal=%{GREEDYDATA:terminal} res=%{WORD:result}\' |
 
 
 EXAMPLE:
@@ -31,7 +31,7 @@ EXAMPLE:
 
 MATCHED BY:
 
-	type=%{WORD:audit_type} msg=audit\(%{NUMBER:audit_epoch}:%{NUMBER:audit_counter}\): pid=%{NUMBER:audit_pid} uid=%{NUMBER:audit_uid} auid=%{NUMBER:audit_audid} ses=%{NUMBER:ses} subj=%{GREEDYDATA:subj} msg=\'op=%{WORD:operation}:%{WORD:detail_operation} grantors=%{WORD:grantors} acct=\"%{WORD:acct_user}\" exe=\"%{UNIXPATH:exec}\" hostname=%{GREEDYDATA:hostname} addr=%{GREEDYDATA:ipaddr} terminal=%{GREEDYDATA:terminal} res=%{WORD:result}\'
+	^type=%{WORD:audit_type} msg=audit\(%{NUMBER:audit_epoch}:%{NUMBER:audit_counter}\): pid=%{NUMBER:audit_pid} uid=%{NUMBER:audit_uid} auid=%{NUMBER:audit_audid} ses=%{NUMBER:ses} subj=%{GREEDYDATA:subj} msg=\'op=%{WORD:operation}:%{WORD:detail_operation} grantors=%{WORD:grantors} acct=\"%{WORD:acct_user}\" exe=\"%{UNIXPATH:exec}\" hostname=%{GREEDYDATA:hostname} addr=%{GREEDYDATA:ipaddr} terminal=%{GREEDYDATA:terminal} res=%{WORD:result}\'
 
 ### Samba Patterns
 
@@ -56,7 +56,7 @@ MATCHED BY:
 
 Custom pattern for this grok filter (Radius timestamp format):
 
-	RADIUSTIMESTAMP %{DAY} %{MONTH} %{MONTHDAY} %{TIME} %{YEAR}
+	RADIUSTIMESTAMP %{DAY}%{SPACE}%{MONTH}%{SPACE}%{MONTHDAY}%{SPACE}%{TIME}%{SPACE}%{YEAR}
 
 #### Radius Detail-Start Log Line
 
@@ -79,7 +79,7 @@ EXAMPLE:
 
 MATCHED BY:
 
-	%{RADIUSTIMESTAMP}%{SPACE}Acct-Session-Id = %{QUOTEDSTRING:Acct-Session-Id}%{SPACE}Acct-Status-Type = %{WORD:AcctStatusType}%{SPACE}Acct-Authentic = %{WORD:AcctAuthentic}%{SPACE}User-Name = \"%{DATA:UserName}\"%{SPACE}NAS-IP-Address = %{IP:NASIPAddress}%{SPACE}NAS-Identifier = \"%{DATA:NASIdentifier}\"%{SPACE}NAS-Port = %{NUMBER:NASPort}%{SPACE}Called-Station-Id = \"%{DATA:CalledStationId}\"%{SPACE}Calling-Station-Id = \"%{MAC:CallingStationId}\"%{SPACE}NAS-Port-Type = %{DATA:NASPortType}%{SPACE}Connect-Info = \"%{DATA:ConnectInfo}\"%{SPACE}Acct-Unique-Session-Id = \"%{DATA:AcctUniqueSessionId}\"%{SPACE}Timestamp = %{NUMBER:Timestamp}
+	^%{RADIUSTIMESTAMP}\n%{SPACE}Acct-Session-Id%{SPACE}=%{SPACE}\"%{DATA:AcctSessionId}\"\n%{SPACE}Acct-Status-Type%{SPACE}=%{SPACE}%{WORD:AcctStatusType}\n%{SPACE}Acct-Authentic%{SPACE}=%{SPACE}%{WORD:AcctAuthentic}\n%{SPACE}User-Name%{SPACE}=%{SPACE}\"%{DATA:UserName}\"\n%{SPACE}NAS-IP-Address%{SPACE}=%{SPACE}%{IP:NASIPAddress}\n%{SPACE}NAS-Identifier%{SPACE}=%{SPACE}\"%{DATA:NASIdentifier}\"\n%{SPACE}NAS-Port%{SPACE}=%{SPACE}%{NUMBER:NASPort}\n%{SPACE}Called-Station-Id%{SPACE}=%{SPACE}\"%{DATA:CalledStationId}\"\n%{SPACE}Calling-Station-Id%{SPACE}=%{SPACE}\"%{MAC:CallingStationId}\"\n%{SPACE}NAS-Port-Type%{SPACE}=%{SPACE}%{DATA:NASPortType}\n%{SPACE}Connect-Info%{SPACE}=%{SPACE}\"%{DATA:ConnectInfo}\"\n%{SPACE}Acct-Unique-Session-Id%{SPACE}=%{SPACE}\"%{DATA:AcctUniqueSessionId}\"\n%{SPACE}Timestamp%{SPACE}=%{SPACE}%{NUMBER:Timestamp}
 
 #### Radius Detail-Stop Log Line
 
@@ -110,7 +110,7 @@ EXAMPLE:
 MATCHED BY:
 
 
-	%{RADIUSTIMESTAMP}%{SPACE}Acct-Session-Id = %{QUOTEDSTRING:Acct-Session-Id}%{SPACE}Acct-Status-Type = %{WORD:AcctStatusType}%{SPACE}Acct-Authentic = %{WORD:AcctAuthentic}%{SPACE}User-Name = \"%{DATA:UserName}\"%{SPACE}NAS-IP-Address = %{IP:NASIPAddress}%{SPACE}NAS-Identifier = \"%{DATA:NASIdentifier}\"%{SPACE}NAS-Port = %{NUMBER:NASPort}%{SPACE}Called-Station-Id = \"%{DATA:CalledStationId}\"%{SPACE}Calling-Station-Id = \"%{MAC:CallingStationId}\"%{SPACE}NAS-Port-Type = %{DATA:NASPortType}%{SPACE}Connect-Info = \"%{DATA:ConnectInfo}\"%{SPACE}Acct-Session-Time = %{NUMBER:AcctSessionTime}%{SPACE}Acct-Input-Packets = %{NUMBER:AcctInputPackets}%{SPACE}Acct-Output-Packets = %{NUMBER:AcctOutputPackets}%{SPACE}Acct-Input-Octets = %{NUMBER:AcctInputOctets}%{SPACE}Acct-Output-Octets = %{NUMBER:AcctOutputOctets}%{SPACE}Event-Timestamp = \"%{DATA:EventTimestamp}\"%{SPACE}Acct-Terminate-Cause = %{DATA:AcctTerminateCause}%{SPACE}Acct-Unique-Session-Id = \"%{DATA:AcctUniqueSessionId}\"%{SPACE}Timestamp = %{NUMBER:Timestamp}
+	^%{RADIUSTIMESTAMP}\n%{SPACE}Acct-Session-Id%{SPACE}=%{SPACE}\"%{DATA:AcctSessionId}\"\n%{SPACE}Acct-Status-Type%{SPACE}=%{SPACE}%{WORD:AcctStatusType}\n%{SPACE}Acct-Authentic%{SPACE}=%{SPACE}%{WORD:AcctAuthentic}\n%{SPACE}User-Name%{SPACE}=%{SPACE}\"%{DATA:UserName}\"\n%{SPACE}NAS-IP-Address%{SPACE}=%{SPACE}%{IP:NASIPAddress}\n%{SPACE}NAS-Identifier%{SPACE}=%{SPACE}\"%{DATA:NASIdentifier}\"\n%{SPACE}NAS-Port%{SPACE}=%{SPACE}%{NUMBER:NASPort}\n%{SPACE}Called-Station-Id%{SPACE}=%{SPACE}\"%{DATA:CalledStationId}\"\n%{SPACE}Calling-Station-Id%{SPACE}=%{SPACE}\"%{MAC:CallingStationId}\"\n%{SPACE}NAS-Port-Type%{SPACE}=%{SPACE}%{DATA:NASPortType}\n%{SPACE}Connect-Info%{SPACE}=%{SPACE}\"%{DATA:ConnectInfo}\"\n%{SPACE}Acct-Session-Time%{SPACE}=%{SPACE}%{NUMBER:AcctSessionTime}\n%{SPACE}Acct-Input-Packets%{SPACE}=%{SPACE}%{NUMBER:AcctInputPackets}\n%{SPACE}Acct-Output-Packets%{SPACE}=%{SPACE}%{NUMBER:AcctOutputPackets}\n%{SPACE}Acct-Input-Octets%{SPACE}=%{SPACE}%{NUMBER:AcctInputOctets}\n%{SPACE}Acct-Output-Octets%{SPACE}=%{SPACE}%{NUMBER:AcctOutputOctets}\n%{SPACE}Event-Timestamp%{SPACE}=%{SPACE}\"%{DATA:EventTimestamp}\"\n%{SPACE}Acct-Terminate-Cause%{SPACE}=%{SPACE}%{DATA:AcctTerminateCause}\n%{SPACE}Acct-Unique-Session-Id%{SPACE}=%{SPACE}\"%{DATA:AcctUniqueSessionId}\"\n%{SPACE}Timestamp%{SPACE}=%{SPACE}%{NUMBER:Timestamp}
 
 [//]: ##################################################################
 [//]: ##################################################################
