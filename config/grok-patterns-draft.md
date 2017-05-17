@@ -33,24 +33,45 @@ MATCHED BY:
 
 	^type=%{WORD:audit_type} msg=audit\(%{NUMBER:audit_epoch}:%{NUMBER:audit_counter}\): pid=%{NUMBER:audit_pid} uid=%{NUMBER:audit_uid} auid=%{NUMBER:audit_audid} ses=%{NUMBER:ses} subj=%{GREEDYDATA:subj} msg=\'op=%{WORD:operation}:%{WORD:detail_operation} grantors=%{WORD:grantors} acct=\"%{WORD:acct_user}\" exe=\"%{UNIXPATH:exec}\" hostname=%{GREEDYDATA:hostname} addr=%{GREEDYDATA:ipaddr} terminal=%{GREEDYDATA:terminal} res=%{WORD:result}\'
 
+---
+
 ### Samba Patterns
 
 Custom pattern for this grok filter (Samba timestamp format):
 
 	SMBDATE %{YEAR}\/%{MONTHNUM}\/%{MONTHDAY}%{SPACE}%{TIME}
 
-| LOG LINE - SAMBA | FILTER MATCH  |
-|:---------------------:|:-------------:|
-| \[2017/05/07 03:49:40,  0\] lib/util_sock.c:1491(get_peer_addr_internal)\n  getpeername failed. Error was Transport endpoint is not connected\n  Denied connection from 0.0.0.0 (0.0.0.0) | ^\[%{SMBDATE:samba_date},%{SPACE}%{NUMBER:samba_severity_code}\]%{SPACE}%{DATA:samba_class}\n%{SPACE}%{GREEDYDATA:samba_message}", "\[%{SMBDATE:samba_date},%{SPACE}%{NUMBER:samba_severity_code}\]%{SPACE}%{GREEDYDATA:samba_class} |
+#### Samba Log Line (w/ Message)
 
+| LOG LINE - SAMBA W/MESSAGE | FILTER MATCH  |
+|:---------------------:|:-------------:|
+| \[2017/05/07 03:49:40,  0\] lib/util_sock.c:1491(get_peer_addr_internal)\n  getpeername failed. Error was Transport endpoint is not connected\n  Denied connection from 0.0.0.0 (0.0.0.0) | ^\[%{SMBDATE:samba_date},%{SPACE}%{NUMBER:samba_severity_code}\]%{SPACE}%{DATA:samba_class}\n%{SPACE}%{GREEDYDATA:samba_message} |
 
 EXAMPLE:
 
-	\[2017/05/07 03:49:40,  0\] lib/util_sock.c:1491(get_peer_addr_internal)\n  getpeername failed. Error was Transport endpoint is not connected\n  Denied connection from 0.0.0.0 (0.0.0.0)
+	[2017/05/07 03:49:40,  0\] lib/util_sock.c:1491(get_peer_addr_internal)\n  getpeername failed. Error was Transport endpoint is not connected\n  Denied connection from 0.0.0.0 (0.0.0.0)
 
 MATCHED BY:
 
-	^\[%{SMBDATE:samba_date},%{SPACE}%{NUMBER:samba_severity_code}\]%{SPACE}%{DATA:samba_class}\n%{SPACE}%{GREEDYDATA:samba_message}", "\[%{SMBDATE:samba_date},%{SPACE}%{NUMBER:samba_severity_code}\]%{SPACE}%{GREEDYDATA:samba_class}
+	^\[%{SMBDATE:samba_date},%{SPACE}%{NUMBER:samba_severity_code}\]%{SPACE}%{DATA:samba_class}\n%{SPACE}%{GREEDYDATA:samba_message}
+
+
+#### Samba Log Line (No Message)
+
+	
+| LOG LINE - SAMBA SIMPLE | FILTER MATCH  |
+|:---------------------:|:-------------:|
+| \[2017/05/08 11:38:01,  0] lib/util_sock.c:738(write_data) | ^\[%{SMBDATE:samba_date},%{SPACE}%{NUMBER:samba_severity_code}\]%{SPACE}%{DATA:samba_class}\n%{SPACE}%{GREEDYDATA:samba_message} |
+
+EXAMPLE:
+
+	[2017/05/08 11:38:01,  0] lib/util_sock.c:738(write_data)
+
+MATCHED BY:
+
+	^\[%{SMBDATE:samba_date},%{SPACE}%{NUMBER:samba_severity_code}\]%{SPACE}%{GREEDYDATA:samba_class}
+
+---
 
 ### Radius Patterns
 
@@ -111,6 +132,29 @@ MATCHED BY:
 
 
 	^%{RADIUSTIMESTAMP}\n%{SPACE}Acct-Session-Id%{SPACE}=%{SPACE}\"%{DATA:AcctSessionId}\"\n%{SPACE}Acct-Status-Type%{SPACE}=%{SPACE}%{WORD:AcctStatusType}\n%{SPACE}Acct-Authentic%{SPACE}=%{SPACE}%{WORD:AcctAuthentic}\n%{SPACE}User-Name%{SPACE}=%{SPACE}\"%{DATA:UserName}\"\n%{SPACE}NAS-IP-Address%{SPACE}=%{SPACE}%{IP:NASIPAddress}\n%{SPACE}NAS-Identifier%{SPACE}=%{SPACE}\"%{DATA:NASIdentifier}\"\n%{SPACE}NAS-Port%{SPACE}=%{SPACE}%{NUMBER:NASPort}\n%{SPACE}Called-Station-Id%{SPACE}=%{SPACE}\"%{DATA:CalledStationId}\"\n%{SPACE}Calling-Station-Id%{SPACE}=%{SPACE}\"%{MAC:CallingStationId}\"\n%{SPACE}NAS-Port-Type%{SPACE}=%{SPACE}%{DATA:NASPortType}\n%{SPACE}Connect-Info%{SPACE}=%{SPACE}\"%{DATA:ConnectInfo}\"\n%{SPACE}Acct-Session-Time%{SPACE}=%{SPACE}%{NUMBER:AcctSessionTime}\n%{SPACE}Acct-Input-Packets%{SPACE}=%{SPACE}%{NUMBER:AcctInputPackets}\n%{SPACE}Acct-Output-Packets%{SPACE}=%{SPACE}%{NUMBER:AcctOutputPackets}\n%{SPACE}Acct-Input-Octets%{SPACE}=%{SPACE}%{NUMBER:AcctInputOctets}\n%{SPACE}Acct-Output-Octets%{SPACE}=%{SPACE}%{NUMBER:AcctOutputOctets}\n%{SPACE}Event-Timestamp%{SPACE}=%{SPACE}\"%{DATA:EventTimestamp}\"\n%{SPACE}Acct-Terminate-Cause%{SPACE}=%{SPACE}%{DATA:AcctTerminateCause}\n%{SPACE}Acct-Unique-Session-Id%{SPACE}=%{SPACE}\"%{DATA:AcctUniqueSessionId}\"\n%{SPACE}Timestamp%{SPACE}=%{SPACE}%{NUMBER:Timestamp}
+
+
+#### Radius Error Log Line
+
+EXAMPLE:
+
+	Wed May 10 12:51:54 2017 : Error: rlm_radutmp: Logout entry for NAS ap-biblio port 0 has wrong ID
+
+MATCHED BY:
+
+	^%{RADIUSTIMESTAMP}%{SPACE}:%{SPACE}%{WORD:radiusmessagetype}:%{SPACE}%{DATA:radiuserrorclass}:%{SPACE}%{GREEDYDATA:radiusmessage}
+
+
+#### Radius Info Log Line
+
+EXAMPLE:
+
+	Wed May 10 12:52:30 2017 : Info:   [ldap] Attempting reconnect
+
+MATCHED BY:
+
+	^%{RADIUSTIMESTAMP}%{SPACE}:%{SPACE}%{WORD:radiusmessagetype}:%{SPACE}%{GREEDYDATA:radiusmessage}
+
 
 [//]: ##################################################################
 [//]: ##################################################################
