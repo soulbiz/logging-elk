@@ -134,7 +134,7 @@ MATCHED BY:
 	^%{RADIUSTIMESTAMP}\n%{SPACE}Acct-Session-Id%{SPACE}=%{SPACE}\"%{DATA:AcctSessionId}\"\n%{SPACE}Acct-Status-Type%{SPACE}=%{SPACE}%{WORD:AcctStatusType}\n%{SPACE}Acct-Authentic%{SPACE}=%{SPACE}%{WORD:AcctAuthentic}\n%{SPACE}User-Name%{SPACE}=%{SPACE}\"%{DATA:UserName}\"\n%{SPACE}NAS-IP-Address%{SPACE}=%{SPACE}%{IP:NASIPAddress}\n%{SPACE}NAS-Identifier%{SPACE}=%{SPACE}\"%{DATA:NASIdentifier}\"\n%{SPACE}NAS-Port%{SPACE}=%{SPACE}%{NUMBER:NASPort}\n%{SPACE}Called-Station-Id%{SPACE}=%{SPACE}\"%{DATA:CalledStationId}\"\n%{SPACE}Calling-Station-Id%{SPACE}=%{SPACE}\"%{MAC:CallingStationId}\"\n%{SPACE}NAS-Port-Type%{SPACE}=%{SPACE}%{DATA:NASPortType}\n%{SPACE}Connect-Info%{SPACE}=%{SPACE}\"%{DATA:ConnectInfo}\"\n%{SPACE}Acct-Session-Time%{SPACE}=%{SPACE}%{NUMBER:AcctSessionTime}\n%{SPACE}Acct-Input-Packets%{SPACE}=%{SPACE}%{NUMBER:AcctInputPackets}\n%{SPACE}Acct-Output-Packets%{SPACE}=%{SPACE}%{NUMBER:AcctOutputPackets}\n%{SPACE}Acct-Input-Octets%{SPACE}=%{SPACE}%{NUMBER:AcctInputOctets}\n%{SPACE}Acct-Output-Octets%{SPACE}=%{SPACE}%{NUMBER:AcctOutputOctets}\n%{SPACE}Event-Timestamp%{SPACE}=%{SPACE}\"%{DATA:EventTimestamp}\"\n%{SPACE}Acct-Terminate-Cause%{SPACE}=%{SPACE}%{DATA:AcctTerminateCause}\n%{SPACE}Acct-Unique-Session-Id%{SPACE}=%{SPACE}\"%{DATA:AcctUniqueSessionId}\"\n%{SPACE}Timestamp%{SPACE}=%{SPACE}%{NUMBER:Timestamp}
 
 
-#### Radius Error Log Line
+#### Radius Error/Info Long-Log Line
 
 EXAMPLE:
 
@@ -142,10 +142,10 @@ EXAMPLE:
 
 MATCHED BY:
 
-	^%{RADIUSTIMESTAMP}%{SPACE}:%{SPACE}%{WORD:radiusmessagetype}:%{SPACE}%{DATA:radiuserrorclass}:%{SPACE}%{GREEDYDATA:radiusmessage}
+	^%{RADIUSTIMESTAMP}%{SPACE}:%{SPACE}%{WORD:radiusmessagetype}:%{SPACE}%{DATA:radiusmessageclass}:%{SPACE}%{GREEDYDATA:radiusmessage}
 
 
-#### Radius Info Log Line
+#### Radius Info Short-Log Line
 
 EXAMPLE:
 
