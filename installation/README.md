@@ -15,17 +15,14 @@ Run the following command to import the Elasticsearch public GPG key into rpm:
 
     sudo rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch
 
-## Install Elasticsearch
+Next, create and edit the Elastic repository for us to use:
 
-Create a new yum repository file for Elasticsearch.
+	sudo vim /etc/yum.repos.d/elasticsearch.repo
 
-    sudo vim /etc/yum.repos.d/elasticsearch.repo
+Add the following lines:
 
-Add the following repository configuration:
-/etc/yum.repos.d/elasticsearch.repo
-
-	[elasticsearch-5.x]
-	name=Elasticsearch repository for 5.x packages
+	[elastic-5.x]
+	name=Elastic repository for 5.x packages
 	baseurl=https://artifacts.elastic.co/packages/5.x/yum
 	gpgcheck=1
 	gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
@@ -33,9 +30,11 @@ Add the following repository configuration:
 	autorefresh=1
 	type=rpm-md
 
-Save and exit.
+With that we'll install the latest 5.x version available for all of our Elastic services.
 
-Now install Elasticsearch:
+## Install Elasticsearch
+
+Run the following command to install Elasticsearch:
 
     sudo dnf -y install elasticsearch
 
@@ -45,7 +44,7 @@ Elasticsearch is now installed. Let's edit the configuration:
 
 You will want to restrict outside access to your Elasticsearch instance (port 9200), so outsiders can't read your data or shutdown your Elasticsearch cluster through the HTTP API. Find the line that specifies `network.host`, uncomment it, and replace its value with `localhost` so it looks like this:
 
-elasticsearch.yml excerpt (updated)
+elasticsearch.yml excerpt (once updated)
 
     network.host: localhost
 
@@ -57,26 +56,6 @@ Now start & enable Elasticsearch to start automatically on boot up:
     sudo systemctl enable elasticsearch
 
 ## Install Kibana
-
-The Kibana package shares the same GPG Key as Elasticsearch, and we already installed that public key.
-
-Create and edit a new yum repository file for Kibana:
-
-    sudo vim /etc/yum.repos.d/kibana.repo
-
-Add the following repository configuration:
-/etc/yum.repos.d/kibana.repo
-
-	[kibana-5.x]
-	name=Kibana repository for 5.x packages
-	baseurl=https://artifacts.elastic.co/packages/5.x/yum
-	gpgcheck=1
-	gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
-	enabled=1
-	autorefresh=1
-	type=rpm-md
-	
-Save and exit.
 
 Install Kibana with this command:
 
@@ -99,25 +78,36 @@ If you want to follow our setup, check how to do it here:
 
 Otherwise, feel free to setup your own proxy so you can access the Kibana interface!
 
+## Install Filebeat
+
+We'll be installing the Filebeat package so we can extract and load the Elasticsearch Index Template and the Kibana Index Pattern.
+The recommended index template file for Filebeat is installed by the Filebeat packages.
+
+Run the following command:
+
+	sudo dnf -y install filebeat
+	
+Now, we DON'T need to start it!
+We'll just use what we need from it.
+
+Because we need to send the output to Logstash to parse our logs,
+we need to manually load the Filebeat template first into Elasticsearch.
+
+In Elasticsearch, index templates are used to define settings and mappings that determine how fields should be analyzed.
+We need to do that from `localhost`, as we blocked outside access for security reasons.
+
+Just run the following command:
+
+	curl -H 'Content-Type: application/json' -XPUT 'http://localhost:9200/_template/filebeat' -d@/etc/filebeat/filebeat.template.json
+
+Now that we have that, we need to load the Index Pattern:
+
+	/usr/share/filebeat/scripts/import_dashboards -only-index
+
+Once we’ve loaded the index pattern, we can select the `filebeat-*` index pattern in Kibana to explore Filebeat data.
+But first we have to finish with our setup!
 
 ## Install Logstash
-
-Create and edit a new yum repository file for Logstash:
-
-    sudo vim /etc/yum.repos.d/logstash.repo
-
-Add the following repository configuration:
-
-	[logstash-5.x]
-	name=Elastic repository for 5.x packages
-	baseurl=https://artifacts.elastic.co/packages/5.x/yum
-	gpgcheck=1
-	gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
-	enabled=1
-	autorefresh=1
-	type=rpm-md
-
-Save and exit.
 
 Install Logstash with this command:
 

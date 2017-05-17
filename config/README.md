@@ -106,7 +106,10 @@ Restart and enable Logstash to put our configuration changes into effect:
     sudo systemctl start logstash
     sudo systemctl enable logstash
 
-Next, we'll load the sample Kibana dashboards.
+
+## Configure Filebeat Elasticsearch Template + Kibana Index Pattern
+
+Now, we'll need
 
 ## References:
 
