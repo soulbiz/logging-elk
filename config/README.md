@@ -95,21 +95,10 @@ Save and exit. This output basically configures Logstash to store the beats data
 
 If you want to add filters for other applications that use the Filebeat input, be sure to name the files so they sort between the input and the output configuration (i.e. between 02- and 30-).
 
-Test your Logstash configuration with this command:
-
-    sudo service logstash configtest
-
-It should display Configuration OK if there are no syntax errors. Otherwise, try and read the error output to see what's wrong with your Logstash configuration.
-
 Restart and enable Logstash to put our configuration changes into effect:
 
     sudo systemctl start logstash
     sudo systemctl enable logstash
-
-
-## Configure Filebeat Elasticsearch Template + Kibana Index Pattern
-
-Now, we'll need
 
 ## References:
 

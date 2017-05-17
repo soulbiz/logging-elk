@@ -5,7 +5,7 @@ Anyway, it should provide enough guidance to apply it in any other suitable dist
 
 ## Prerequisites
 
-For our *ELK Server* (from now on, **ELKS**) we'll also need to install:
+For our *ELK Server* we'll also need to install:
 
 * Java 8 (As recommended by Elasticsearch, Java 9 not supported)
 * Nginx (To setup a reverse proxy for external connections)
@@ -126,4 +126,5 @@ Let's keep going!
 
 ## References:
 
-[**Digital Ocean - Mitchell Anicas**: How To Install ELK on CentOS 7](https://www.digitalocean.com/community/tutorials/how-to-install-elasticsearch-logstash-and-kibana-elk-stack-on-centos-7)
+* [**Digital Ocean - Mitchell Anicas**: How To Install ELK on CentOS 7](https://www.digitalocean.com/community/tutorials/how-to-install-elasticsearch-logstash-and-kibana-elk-stack-on-centos-7)
+* [Elastic's Filebeat Reference](https://www.elastic.co/guide/en/beats/filebeat/current/index.html)
