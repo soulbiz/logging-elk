@@ -100,7 +100,8 @@ Just run the following command:
 
 	curl -H 'Content-Type: application/json' -XPUT 'http://localhost:9200/_template/filebeat' -d@/etc/filebeat/filebeat.template.json
 
-Now that we have that, we need to load the Index Pattern:
+Now that we have that, we need to load the Index Pattern.
+We can do that with the help of their own script:
 
 	/usr/share/filebeat/scripts/import_dashboards -only-index
 
