@@ -45,11 +45,11 @@ Custom pattern for this grok filter (Samba timestamp format):
 
 | LOG LINE - SAMBA W/MESSAGE | FILTER MATCH  |
 |:---------------------:|:-------------:|
-| \[2017/05/07 03:49:40,  0\] lib/util_sock.c:1491(get_peer_addr_internal)\n  getpeername failed. Error was Transport endpoint is not connected\n  Denied connection from 0.0.0.0 (0.0.0.0) | ^\[%{SMBDATE:samba_date},%{SPACE}%{NUMBER:samba_severity_code}\]%{SPACE}%{DATA:samba_class}\n%{SPACE}%{GREEDYDATA:samba_message} |
+| [2017/05/07 03:49:40,  0] lib/util_sock.c:1491(get_peer_addr_internal)\n  getpeername failed. Error was Transport endpoint is not connected\n  Denied connection from 0.0.0.0 (0.0.0.0) | ^\[%{SMBDATE:samba_date},%{SPACE}%{NUMBER:samba_severity_code}\]%{SPACE}%{DATA:samba_class}\n%{SPACE}%{GREEDYDATA:samba_message} |
 
 EXAMPLE:
 
-	[2017/05/07 03:49:40,  0\] lib/util_sock.c:1491(get_peer_addr_internal)\n  getpeername failed. Error was Transport endpoint is not connected\n  Denied connection from 0.0.0.0 (0.0.0.0)
+	[2017/05/07 03:49:40,  0] lib/util_sock.c:1491(get_peer_addr_internal)\n  getpeername failed. Error was Transport endpoint is not connected\n  Denied connection from 0.0.0.0 (0.0.0.0)
 
 MATCHED BY:
 
@@ -61,7 +61,7 @@ MATCHED BY:
 	
 | LOG LINE - SAMBA SIMPLE | FILTER MATCH  |
 |:---------------------:|:-------------:|
-| \[2017/05/08 11:38:01,  0] lib/util_sock.c:738(write_data) | ^\[%{SMBDATE:samba_date},%{SPACE}%{NUMBER:samba_severity_code}\]%{SPACE}%{DATA:samba_class}\n%{SPACE}%{GREEDYDATA:samba_message} |
+| [2017/05/08 11:38:01,  0] lib/util_sock.c:738(write_data) | ^\[%{SMBDATE:samba_date},%{SPACE}%{NUMBER:samba_severity_code}\]%{SPACE}%{DATA:samba_class}\n%{SPACE}%{GREEDYDATA:samba_message} |
 
 EXAMPLE:
 
