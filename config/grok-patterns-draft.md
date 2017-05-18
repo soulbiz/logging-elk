@@ -42,7 +42,7 @@ To do so, we have to specify where to find them with the `patterns_dir` option i
 
 Grok will load all the pattern files inside that directory.
 
-For a more detailed use of the grok plugin inside Logstash, click [here](https://www.elastic.co/guide/en/logstash/5.4/plugins-filters-grok.html#_synopsis_130).
+For a more detailed use of the grok plugin inside Logstash, please check Elastic's [Grok Plugin](https://www.elastic.co/guide/en/logstash/5.4/plugins-filters-grok.html) reference!
 
 ### Audit Patterns
 
