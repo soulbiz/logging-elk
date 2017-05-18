@@ -29,11 +29,22 @@ According to the official [Grok Plugin](https://www.elastic.co/guide/en/logstash
 
 >Grok sits on top of regular expressions, so any regular expressions are valid in grok as well. 
 
+### Custom Patterns
+
 After understanding how it works, we can also make our own custom patterns, which will make it easier for us to fetch our target data.
 They can even contain other grok patterns!
 We can save them in a text file with the following syntax, one pattern per line:
 
 	PATTERN-SAMPLE [0-9A-F]{10,11}
+	TYPE type=%{WORD}
+	MSG_ID msg=audit([0-9]+\.[0-9]+:[0-9]+)
+	PID pid=[0-9]+
+	UID uid=[0-9]+
+	UNIT unit=%{WORD}@%{WORD}
+	EXE exe="%{UNIXPATH}"
+	MSG msg=%{QUOTEDSTRING}
+	RES res=%{WORD}
+	SMBDATE %{YEAR}\/%{MONTHNUM}\/%{MONTHDAY}%{SPACE}%{TIME}
 
 Then we just have to tell Grok where to find those patterns so we can use them!
 To do so, we have to specify where to find them with the `patterns_dir` option inside the Grok parameters:
@@ -43,6 +54,10 @@ To do so, we have to specify where to find them with the `patterns_dir` option i
 Grok will load all the pattern files inside that directory.
 
 For a more detailed use of the grok plugin inside Logstash, please check Elastic's [Grok Plugin](https://www.elastic.co/guide/en/logstash/5.4/plugins-filters-grok.html) reference!
+
+Now, let's take a look at the filters we created for the logs we're using.
+
+## Used Log Line Patterns
 
 ### Audit Patterns
 
@@ -97,9 +112,7 @@ MATCHED BY:
 
 	^\[%{SMBDATE:samba_date},%{SPACE}%{NUMBER:samba_severity_code}\]%{SPACE}%{DATA:samba_class}\n%{SPACE}%{GREEDYDATA:samba_message}
 
-
 #### Samba Log Line (No Message)
-
 	
 | LOG LINE - SAMBA SIMPLE | FILTER MATCH  |
 |:---------------------:|:-------------:|
@@ -141,7 +154,6 @@ EXAMPLE:
 			Timestamp = 1491901532
 
 MATCHED BY:
-
 	^%{RADIUSTIMESTAMP}\n%{SPACE}Acct-Session-Id%{SPACE}=%{SPACE}\"%{DATA:AcctSessionId}\"\n%{SPACE}Acct-Status-Type%{SPACE}=%{SPACE}%{WORD:AcctStatusType}\n%{SPACE}Acct-Authentic%{SPACE}=%{SPACE}%{WORD:AcctAuthentic}\n%{SPACE}User-Name%{SPACE}=%{SPACE}\"%{DATA:UserName}\"\n%{SPACE}NAS-IP-Address%{SPACE}=%{SPACE}%{IP:NASIPAddress}\n%{SPACE}NAS-Identifier%{SPACE}=%{SPACE}\"%{DATA:NASIdentifier}\"\n%{SPACE}NAS-Port%{SPACE}=%{SPACE}%{NUMBER:NASPort}\n%{SPACE}Called-Station-Id%{SPACE}=%{SPACE}\"%{DATA:CalledStationId}\"\n%{SPACE}Calling-Station-Id%{SPACE}=%{SPACE}\"%{MAC:CallingStationId}\"\n%{SPACE}NAS-Port-Type%{SPACE}=%{SPACE}%{DATA:NASPortType}\n%{SPACE}Connect-Info%{SPACE}=%{SPACE}\"%{DATA:ConnectInfo}\"\n%{SPACE}Acct-Unique-Session-Id%{SPACE}=%{SPACE}\"%{DATA:AcctUniqueSessionId}\"\n%{SPACE}Timestamp%{SPACE}=%{SPACE}%{NUMBER:Timestamp}
 
 #### Radius Detail-Stop Log Line
@@ -171,8 +183,6 @@ EXAMPLE:
 			Timestamp = 1491901842
 
 MATCHED BY:
-
-
 	^%{RADIUSTIMESTAMP}\n%{SPACE}Acct-Session-Id%{SPACE}=%{SPACE}\"%{DATA:AcctSessionId}\"\n%{SPACE}Acct-Status-Type%{SPACE}=%{SPACE}%{WORD:AcctStatusType}\n%{SPACE}Acct-Authentic%{SPACE}=%{SPACE}%{WORD:AcctAuthentic}\n%{SPACE}User-Name%{SPACE}=%{SPACE}\"%{DATA:UserName}\"\n%{SPACE}NAS-IP-Address%{SPACE}=%{SPACE}%{IP:NASIPAddress}\n%{SPACE}NAS-Identifier%{SPACE}=%{SPACE}\"%{DATA:NASIdentifier}\"\n%{SPACE}NAS-Port%{SPACE}=%{SPACE}%{NUMBER:NASPort}\n%{SPACE}Called-Station-Id%{SPACE}=%{SPACE}\"%{DATA:CalledStationId}\"\n%{SPACE}Calling-Station-Id%{SPACE}=%{SPACE}\"%{MAC:CallingStationId}\"\n%{SPACE}NAS-Port-Type%{SPACE}=%{SPACE}%{DATA:NASPortType}\n%{SPACE}Connect-Info%{SPACE}=%{SPACE}\"%{DATA:ConnectInfo}\"\n%{SPACE}Acct-Session-Time%{SPACE}=%{SPACE}%{NUMBER:AcctSessionTime}\n%{SPACE}Acct-Input-Packets%{SPACE}=%{SPACE}%{NUMBER:AcctInputPackets}\n%{SPACE}Acct-Output-Packets%{SPACE}=%{SPACE}%{NUMBER:AcctOutputPackets}\n%{SPACE}Acct-Input-Octets%{SPACE}=%{SPACE}%{NUMBER:AcctInputOctets}\n%{SPACE}Acct-Output-Octets%{SPACE}=%{SPACE}%{NUMBER:AcctOutputOctets}\n%{SPACE}Event-Timestamp%{SPACE}=%{SPACE}\"%{DATA:EventTimestamp}\"\n%{SPACE}Acct-Terminate-Cause%{SPACE}=%{SPACE}%{DATA:AcctTerminateCause}\n%{SPACE}Acct-Unique-Session-Id%{SPACE}=%{SPACE}\"%{DATA:AcctUniqueSessionId}\"\n%{SPACE}Timestamp%{SPACE}=%{SPACE}%{NUMBER:Timestamp}
 
 
@@ -196,42 +206,6 @@ EXAMPLE:
 MATCHED BY:
 
 	^%{RADIUSTIMESTAMP}%{SPACE}:%{SPACE}%{WORD:radiusmessagetype}:%{SPACE}%{GREEDYDATA:radiusmessage}
-
-
-[//]: ##################################################################
-[//]: ##################################################################
-
----
-
-## Custom patterns file example
-
-```
-TYPE type=%{WORD}
-MSG_ID msg=audit([0-9]+\.[0-9]+:[0-9]+)
-PID pid=[0-9]+
-UID uid=[0-9]+
-UNIT unit=%{WORD}@%{WORD}
-EXE exe="%{UNIXPATH}"
-MSG msg=%{QUOTEDSTRING}
-RES res=%{WORD}
-SMBDATE %{YEAR}\/%{MONTHNUM}\/%{MONTHDAY}%{SPACE}%{TIME}
-```
-
-[//]: ##################################################################
-[//]: ##################################################################
-
----
-
-## Query to Elastic:
-
-	curl -sXGET 'http://localhost:9200/filebeat-*/_search' | jq .
-	curl -sXGET 'localhost:9200/filebeat-2017.05.15/_search?q=_id:AVwLEWovA8gqDUZC_cY5' | jq .
-	curl -XDELETE 'localhost:9200/filebeat-2017.05.15'
-
-Recommended to use "jq" to highlight syntax for a more user-friendly preview.
-
-[//]: ##################################################################
-[//]: ##################################################################
 
 ---
 
