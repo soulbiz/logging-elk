@@ -2,7 +2,7 @@
 
 ## Grok Parsing:
 
-Quoting the official Elastic Grok reference:
+According to the official [Grok Plugin](https://www.elastic.co/guide/en/logstash/5.4/plugins-filters-grok.html) reference for Logstash:
 
 >Grok works by combining text patterns into something that matches your logs.
 >The syntax for a grok pattern is `%{SYNTAX:SEMANTIC}`
@@ -29,6 +29,20 @@ Quoting the official Elastic Grok reference:
 
 >Grok sits on top of regular expressions, so any regular expressions are valid in grok as well. 
 
+After understanding how it works, we can also make our own custom patterns, which will make it easier for us to fetch our target data.
+They can even contain other grok patterns!
+We can save them in a text file with the following syntax, one pattern per line:
+
+	PATTERN-SAMPLE [0-9A-F]{10,11}
+
+Then we just have to tell Grok where to find those patterns so we can use them!
+To do so, we have to specify where to find them with the `patterns_dir` option inside the Grok parameters:
+	
+	patterns_dir => ["./patterns"]
+
+Grok will load all the pattern files inside that directory.
+
+For a more detailed use of the grok plugin inside Logstash, click [here](https://www.elastic.co/guide/en/logstash/5.4/plugins-filters-grok.html#_synopsis_130).
 
 ### Audit Patterns
 
@@ -223,6 +237,9 @@ Recommended to use "jq" to highlight syntax for a more user-friendly preview.
 
 ## References
 
-* https://logz.io/blog/logstash-grok/
-* https://grokdebug.herokuapp.com/
-* https://www.elastic.co/guide/en/beats/filebeat/current/multiline-examples.html
+* [**Logsz.io - Ran Ramati**: Guide to Logstash Grok](https://logz.io/blog/logstash-grok/)
+* [**Grok Debugger**](https://grokdebug.herokuapp.com/)
+* [**Elastic/Filebeat** - Managing Multiline Messages](https://www.elastic.co/guide/en/beats/filebeat/current/multiline-examples.html)
+* [**Elastic/Logstash** - Grok Plugin Reference](https://www.elastic.co/guide/en/logstash/5.4/plugins-filters-grok.html)
+* [**Digital Ocean - Mitchell Anicas**: Adding Logstash Filters To Improve Centralized Logging](https://www.digitalocean.com/community/tutorials/adding-logstash-filters-to-improve-centralized-logging)
+

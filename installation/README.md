@@ -127,4 +127,4 @@ Let's keep going!
 ## References:
 
 * [**Digital Ocean - Mitchell Anicas**: How To Install ELK on CentOS 7](https://www.digitalocean.com/community/tutorials/how-to-install-elasticsearch-logstash-and-kibana-elk-stack-on-centos-7)
-* [Elastic's Filebeat Reference](https://www.elastic.co/guide/en/beats/filebeat/current/index.html)
+* [**Elastic** - Filebeat Reference](https://www.elastic.co/guide/en/beats/filebeat/current/index.html)
