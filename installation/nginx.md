@@ -56,4 +56,4 @@ Now start and enable Nginx to put our changes into effect:
 
 **Note**: *This tutorial assumes that SELinux is disabled.*
 
-Kibana is now accessible via your FQDN or the public IP address of your **ELKS** i.e. `http://elk\_server\_public\_ip/`.
+Kibana is now accessible via your FQDN or the public IP address of your **ELK Server** i.e. `http://elk_server_public_ip/`.
