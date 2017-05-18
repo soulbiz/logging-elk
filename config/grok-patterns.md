@@ -1,6 +1,6 @@
-# Parsing Config Draft
+# Grok Parsing & Patterns
 
-## Grok Parsing:
+## About Grok:
 
 According to the official [Grok Plugin](https://www.elastic.co/guide/en/logstash/5.4/plugins-filters-grok.html) reference for Logstash:
 
@@ -57,7 +57,7 @@ For a more detailed use of the grok plugin inside Logstash, please check Elastic
 
 Now, let's take a look at the filters we created for the logs we're using.
 
-## Used Log Line Patterns
+## Used Grok Patterns
 
 ### Audit Patterns
 
