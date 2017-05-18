@@ -2,6 +2,32 @@
 
 ## Grok Parsing:
 
+Quoting the official Elastic Grok reference:
+
+>Grok works by combining text patterns into something that matches your logs.
+>The syntax for a grok pattern is %{SYNTAX:SEMANTIC}
+>The SYNTAX is the name of the pattern that will match your text. For example, 3.44 will be matched by the NUMBER pattern and 55.3.244.1 will be matched by the IP pattern. The syntax is how you match.
+>The SEMANTIC is the identifier you give to the piece of text being matched. For example, 3.44 could be the duration of an event, so you could call it simply duration. Further, a string 55.3.244.1 might identify the client making a request.
+>For the above example, your grok filter would look something like this:
+>%{NUMBER:duration} %{IP:client}>
+
+>Examples: With that idea of a syntax and semantic, we can pull out useful fields from a sample log like this fictional http request log:
+
+			55.3.244.1 GET /index.html 15824 0.043
+
+>The pattern for this could be:
+
+			%{IP:client} %{WORD:method} %{URIPATHPARAM:request} %{NUMBER:bytes} %{NUMBER:duration}
+
+>After the grok filter, the event will have a few extra fields in it:
+
+			client: 55.3.244.1
+			method: GET
+			request: /index.html
+			bytes: 15824
+			duration: 0.043 
+
+
 ### Audit Patterns
 
 #### Audit-Service Log Line

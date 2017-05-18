@@ -5,13 +5,15 @@ If you skipped our [Installation Guide](../installation/), feel free to take a q
 
 ## Creating our own CA and SSL Certificates
 
+Because Filebeat will be sending all of our logs, we do not want them to be visible for untrusted hosts as they travel.
+You can use SSL mutual authentication to secure connections between Filebeat and Logstash. This ensures that Filebeat sends encrypted data to trusted Logstash servers only, and that the Logstash server receives data from trusted Filebeat clients only.
+
 We'll be using the following infrastructure:
 
 * Server certificate
 * Client certificates
 * A main CA to validate both server and client certificates.
 
-Using that we'll be able to ensure a secure communication on both ends.
 We have to make sure that our certificates are signed properly by our CA. Otherwise, we'll be unable to stablish a connection!
 That way we can make sure that no information is sent to unwanted servers or from unwanted clients.
 
@@ -91,14 +93,31 @@ Insert the following output configuration:
       }
     }
 
-Save and exit. This output basically configures Logstash to store the beats data in Elasticsearch which is running at `localhost:9200`, in an index named after the beat used (filebeat, in our case).
+Save and exit. This output basically configures Logstash to store the beats data in Elasticsearch which is running at `localhost:9200`, in an index named after the beat used (filebeat, in our case). We could also configure other outputs elsewhere, for example to a file.
 
 If you want to add filters for other applications that use the Filebeat input, be sure to name the files so they sort between the input and the output configuration (i.e. between 02- and 30-).
 
-Restart and enable Logstash to put our configuration changes into effect:
+Start and enable Logstash to put our configuration into effect:
 
     sudo systemctl start logstash
     sudo systemctl enable logstash
 
-## References:
+## Starting with Kibana
+
+Now that we have our server up and running (and if you followed our steps), we should be able to visualize something!
+
+Head to the server Kibana interface at `http://elk_server_public_ip/`.
+If you configured Nginx as we recommended in our Installation Guide, after logging in with our credentials, a page to config the default index pattern should appear.
+
+Go ahead and select the `filebeat` index pattern (that we previously loaded) from the Index Patterns menu (left side), then click the Star (Set as default index) button to set the Filebeat index as the default.
+
+Once we've done that, we can head to "Discover" at the top navigation bar. Here we can see all log data from Elasticsearch (in a more fancy way).
+You should be able to see a histogram + the full log messages below.
+
+If you click on an event, it should display the parsed fields that we filtered with Grok in the Logstash filters.
+We can see the log data in a table-like display or the full JSON document as it is stored in Elasticsearch (with the new fields added by our filters!).
+
+
+
+
 
