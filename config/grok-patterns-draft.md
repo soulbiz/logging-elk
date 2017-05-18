@@ -13,19 +13,21 @@ Quoting the official Elastic Grok reference:
 
 >Examples: With that idea of a syntax and semantic, we can pull out useful fields from a sample log like this fictional http request log:
 
-			55.3.244.1 GET /index.html 15824 0.043
+	55.3.244.1 GET /index.html 15824 0.043
 
 >The pattern for this could be:
 
-			%{IP:client} %{WORD:method} %{URIPATHPARAM:request} %{NUMBER:bytes} %{NUMBER:duration}
+	%{IP:client} %{WORD:method} %{URIPATHPARAM:request} %{NUMBER:bytes} %{NUMBER:duration}
 
 >After the grok filter, the event will have a few extra fields in it:
 
-			client: 55.3.244.1
-			method: GET
-			request: /index.html
-			bytes: 15824
-			duration: 0.043 
+	client: 55.3.244.1
+	method: GET
+	request: /index.html
+	bytes: 15824
+	duration: 0.043 
+
+>Grok sits on top of regular expressions, so any regular expressions are valid in grok as well. 
 
 
 ### Audit Patterns
