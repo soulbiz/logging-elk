@@ -87,7 +87,7 @@ Run the following command:
 
 	sudo dnf -y install filebeat
 	
-Now, we DON'T need to start it!
+Now, we **DON'T** need to start it!
 We'll just use what we need from it.
 
 Because we need to send the output to Logstash to parse our logs,

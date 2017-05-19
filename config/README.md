@@ -52,8 +52,11 @@ Insert the following input configuration:
       }
     }
 
-Save and quit. This specifies a beats input that will listen on tcp port 5044, and it will use the SSL certificate and private key that we created for our server.
-We'll cover the filebeat client config later on. Be sure to change the certificates and key paths with your own!
+Save and quit.
+This specifies a beats input that will listen on tcp port 5044, and it will use the SSL certificate and private key that we created for our server.
+Be sure to change the certificates and key paths with your own!
+
+We'll cover the filebeat client config [here]().
 
 ### Logstash Filters
 
