@@ -29,7 +29,7 @@ We'll need to use the following for our setup:
 
 **Kibana** is an analytics and visualization platform that can be used to search and view the data that Elasticsearch has indexed. It has a browser-based interface that enables you to check your data or queries in real time and generate custom graphics.
 
-**Elasticsearch** is the main non-structural database in our setup. It is a full-text search and analytics engine which allows to store, search and analyze big volumes of data efficiently. It can be a single server (node) or a cluster (collection of many nodes).
+**Elasticsearch** is the main search engine in our setup. Backed by Apache Lucene (an information retrieval software library), it is a full-text search and analytics engine which allows to store, search and analyze big volumes of data efficiently. Its structure makes it more efficient than text-based common databases such as MongoDB. It can work as a single server (node) or a cluster (collection of many nodes).
 
 The Elasticsearch structure works as follows:
 
@@ -49,4 +49,4 @@ We can also divide an index storage through "shards" that works as an independen
 1. Our Filebeat clients check, read and send our logs's data to Logstash in a JSON format.
 2. Logstash parses the received data, adding additional fields based on our filters, and sends it to be indexed in Elasticsearch.
 3. Elasticsearch stores our JSON data in a common Filebeat-index, separate by the "type" field depending on the log source and its fields.
-4. Kibana reads and translates our stored documents into graphical visualizations for an easier, human-focused data analysis.
+4. Kibana queries, reads and translates our stored documents into graphical visualizations for an easier, human-focused data analysis.
