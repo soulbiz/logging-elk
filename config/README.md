@@ -121,6 +121,11 @@ If you click on an event, it should display the parsed fields that we filtered w
 We can see the log data in a table-like display or the full JSON document as it is stored in Elasticsearch (with the new fields added by our filters!).
 
 
+## References
+
+* [**Digital Ocean - Mitchell Anicas**: How To Install ELK on CentOS 7](https://www.digitalocean.com/community/tutorials/how-to-install-elasticsearch-logstash-and-kibana-elk-stack-on-centos-7)
+* [**Digital Ocean - Mitchell Anicas**: How To Use Kibana Dashboards and Visualizations](https://www.digitalocean.com/community/tutorials/how-to-use-kibana-dashboards-and-visualizations)
+* [**Elastic** - Elastic Stack and Product Documentation](https://www.elastic.co/guide/index.html)
 
 
 
