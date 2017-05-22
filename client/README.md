@@ -31,9 +31,11 @@ Now run the following command:
 
 	sudo dnf -y install filebeat
 
+OK! Now let's set it up.
+
 ## Configuring Filebeat
 
-OK! Once installed, we will edit the config file:
+For that we'll have to edit the config file:
 
 	sudo vim /etc/filebeat/filebeat.yml
 
