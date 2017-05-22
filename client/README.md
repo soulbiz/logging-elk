@@ -31,3 +31,10 @@ Now run the following command:
 
 	sudo dnf -y install filebeat
 
+OK! Once installed, we will edit the config file:
+
+	sudo vim /etc/filebeat/filebeat.yml
+
+First we have the **prospectors**.
+Here we'll define which logs will be tailed and how will them be processed by Filebeat, and how 
+
