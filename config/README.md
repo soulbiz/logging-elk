@@ -120,6 +120,12 @@ You should be able to see a histogram + the full log messages below.
 If you click on an event, it should display the parsed fields that we filtered with Grok in the Logstash filters.
 We can see the log data in a table-like display or the full JSON document as it is stored in Elasticsearch (with the new fields added by our filters!).
 
+Now, we could start making our custom visualizations and dashboards depending on our needs.
+For further information on that process, please check the official Elastic documentation on Kibana and Timelion, a time series data visualizer:
+
+* [**Elastic** - Kibana Reference](https://www.elastic.co/guide/en/kibana/current/index.html)
+* [**Elastic** - Kibana User Guide: Timelion](https://www.elastic.co/guide/en/kibana/current/timelion.html)
+
 
 ## References
 
