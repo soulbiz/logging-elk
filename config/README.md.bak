@@ -14,7 +14,7 @@ We'll be using the following infrastructure:
 * Client certificates
 * A main CA to validate both server and client certificates.
 
-We have to make sure that our certificates are signed properly by our CA. Otherwise, we'll be unable to establish a connection!
+We have to make sure that our certificates are signed properly by our CA. Otherwise, we'll be unable to stablish a connection!
 That way we can make sure that no information is sent to unwanted servers or from unwanted clients.
 
 We will not cover the process to create a correct infrastructure here.

@@ -5,7 +5,7 @@ Centralizing server logs to a main ELK server
 ## Overview
 
 Here we'll try to explain how to centralize your logs using an ELK Stack in our main server.
-We can accomplish that scenario with a physical server-host or a virtual machine.
+We can accomplish that escenario with a physical server-host or a virtual machine.
 
 ## Setup
 
