@@ -46,8 +46,8 @@ Each `-` is a prospector. We can config different options:
 
 * `input_type`: It defines that it will read the input line by line
 * `paths`: Those will be the directories or files to be used. We can use regexp to choose them!
-* `document_type`: It will define in which "type" will those documents be indexed by Elastic by adding a field with that value. **Watch out!** We need that value to match the "type" value in our server's Logstash Grok Filters so we apply the appropriate filters. 
-* `multiline`: Those 3 options will define which lines are the initials of a single log-line that span multiple lines of text. We can specify which pattern they should match to be considered as a part of a single multiline event. *Check the Filebeat references for more information about multiline matching*.
+* `document_type`: It will define in wich "type" will those documents be indexed by Elastic by adding a field with that value. **Watch out!** We need that value to match the "type" value in our server's Logstash Grok Filters so we apply the appropiate filters. 
+* `multiline`: Those 3 options will define which lines are the initials of a single log-line that span multiple lines of text. We can specify which pattern they should match to be considered as a part of a single multiline event. *Chech the Filebeat references for more information about multiline matching*.
 
 We will be using the following input config for our clients:
 
@@ -110,7 +110,7 @@ Our Logstash output for this setup should look like that:
 	  ssl.key: "/var/tmp/certificates/omar_client_2.key"
 
 
-As we can see, we need to specify the Logstash host where we'll send our events. Change the `elk_server` hostname with your own! We can specify more than one if we want in its list value. 
+As we can see, we need to specify the Logstash's host where we'll send our events. Change the `elk_server` hostname with your own! We can specify more than one if we want in its list value. 
 
 For the SSL config, we are using a both server and client verification. As stated in our [server configuration guide](../config), we will need our main CA certificate to verify the one from the server. Also, to be able to send data there, we need our own key and certificate that should be validated by the same CA. Be sure to change those values with your certificates and key paths!
 
