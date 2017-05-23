@@ -48,5 +48,3 @@ You can also use POST without specifying an ID, so it will be generated automati
 	
 In both cases, the index and type will be created.
 
----
-
