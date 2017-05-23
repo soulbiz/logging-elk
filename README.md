@@ -50,3 +50,13 @@ We can also divide an index storage through "shards" that works as an independen
 2. Logstash parses the received data, adding additional fields based on our filters, and sends it to be indexed in Elasticsearch.
 3. Elasticsearch stores our JSON data in a common Filebeat-index, separate by the "type" field depending on the log source and its fields.
 4. Kibana queries, reads and translates our stored documents into graphical visualizations for an easier, human-focused data analysis.
+
+---
+
+## How to proceed in this repository
+
+1. [Installation](installation/)
+2. [Config](config/)
+3. [Client](client/) (if needed to config)
+
+Also, feel free to check the [examples](examples/) for some elasticsearch interaction and understanding of our setup's data flow!
