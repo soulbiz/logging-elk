@@ -5,6 +5,7 @@
 	curl -sXGET 'http://localhost:9200/filebeat-*/_search' | jq .
 	curl -sXGET 'localhost:9200/filebeat-2017.05.15/_search?q=_id:AVwLEWovA8gqDUZC_cY5' | jq .
 	curl -XDELETE 'localhost:9200/filebeat-2017.05.15'
+	curl -H "Content-Type: application/json" -XPOST 'localhost:9200/bank/account/_bulk?pretty&refresh' --data-binary "file.json"
 
 Recommended to use "jq" to highlight syntax for a more user-friendly preview!
 
@@ -48,3 +49,18 @@ You can also use POST without specifying an ID, so it will be generated automati
 	
 In both cases, the index and type will be created.
 
+### Searchs:
+
+REST Request URI:
+
+	GET /bank/_search?q=*&sort=account_number:asc&pretty
+
+REST Request body:
+
+	GET /bank/_search
+	{
+	  "query": { "match_all": {} },
+	  "sort": [
+		{ "account_number": "asc" }
+	  ]
+	}
